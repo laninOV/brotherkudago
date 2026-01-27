@@ -17,6 +17,8 @@
    * - url?: string
    */
 
+  const FALLBACK_IMAGE = "./15e5cdd2-9c73-496e-859f-66a1dc59b84f.png";
+
   const EVENTS = [
     {
       id: "evt-201",
@@ -369,9 +371,10 @@
       .filter(Boolean)
       .join("");
 
-    const imageHtml = event.image
-      ? `<img src="${escapeHtml(event.image)}" alt="">`
-      : `<div class="bk-card__placeholder"><span>Фото скоро</span></div>`;
+    const imageSrc = event.image || FALLBACK_IMAGE;
+    const imageHtml = `<img src="${escapeHtml(imageSrc)}" alt="" width="1200" height="900" loading="lazy" onerror="this.onerror=null;this.src='${escapeHtml(
+      FALLBACK_IMAGE
+    )}';">`;
 
     return `
       <article class="bk-card" data-id="${escapeHtml(event.id)}">
@@ -407,9 +410,10 @@
       : "Дата не указана";
 
     const tags = Array.isArray(event.tags) ? event.tags : [];
-    const imageHtml = event.image
-      ? `<img src="${escapeHtml(event.image)}" alt="">`
-      : "";
+    const imageSrc = event.image || FALLBACK_IMAGE;
+    const imageHtml = `<img src="${escapeHtml(imageSrc)}" alt="" width="1200" height="900" loading="lazy" onerror="this.onerror=null;this.src='${escapeHtml(
+      FALLBACK_IMAGE
+    )}';">`;
 
     const address = event.address ? ` · ${escapeHtml(event.address)}` : "";
 
