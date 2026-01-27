@@ -8,11 +8,17 @@
       name="description"
       content="ОКОЛО — бесконечная лента городских идей и событий. Сохраняй избранное, общайся и собирай свой досуг."
     >
+    <meta name="theme-color" content="#0c0c12">
     <link rel="icon" type="image/png" href="./iloveeventfest_files/Logo-32x32-CtMOuIU1.png">
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+    <link rel="preconnect" href="https://avatars.mds.yandex.net" crossorigin>
+    <link rel="preconnect" href="https://static.tildacdn.com" crossorigin>
+    <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
     <link rel="stylesheet" href="./brotherkudago.css">
     <meta name="color-scheme" content="dark">
   </head>
   <body>
+    <a class="bk-skip" href="#main">Перейти к контенту</a>
     <header class="bk-header">
       <div class="bk-header__inner">
         <a class="bk-brand" href="./iloveeventfest.html" aria-label="На главную">
@@ -31,19 +37,21 @@
       </div>
     </header>
 
-    <main class="bk-main">
+    <main id="main" class="bk-main">
       <section class="bk-hero">
         <div>
+          <h1 class="bk-sr-only">ОКОЛО — подборка мероприятий</h1>
           <div class="bk-hero__actions">
             <a class="bk-hero__cta" href="https://t.me/okolodating_bot" target="_blank" rel="noopener">Пойдём вместе?</a>
-            <span class="bk-hero__hint">заходи в Telegram, чтобы найти компанию прямо сейчас</span>
+            <span class="bk-hero__hint">Заходи в Telegram, чтобы найти компанию прямо сейчас</span>
           </div>
         </div>
       </section>
       <section class="bk-feed" aria-label="Список событий">
+        <h2 class="bk-sr-only">Лента событий</h2>
         <div id="bk-list" class="bk-list"></div>
         <div class="bk-status-wrapper">
-          <div id="bk-status" class="bk-status" aria-live="polite">Собираем идеи вокруг города.</div>
+          <div id="bk-status" class="bk-status" aria-live="polite">Собираем идеи вокруг города…</div>
         </div>
       </section>
       <section class="bk-bot">
@@ -67,8 +75,8 @@
           <div class="bk-footer-card__brand">
             <div class="bk-logo-icon">О</div>
             <div>
-              <div class="bk-footer-card__title">мы тут!</div>
-              <a href="https://t.me/okolodating_bot" target="_blank" rel="noopener" class="bk-footer-tg">пиши в Telegram</a>
+              <div class="bk-footer-card__title">Мы тут!</div>
+              <a href="https://t.me/okolodating_bot" target="_blank" rel="noopener" class="bk-footer-tg">Пиши в Telegram</a>
             </div>
           </div>
           <p class="bk-footer-card__copy">Пиши сюда с предложениями, идеями и актуальными датами — мы внимательно подхватываем любой инфопоток.</p>
@@ -86,7 +94,7 @@
     <button id="bk-top" class="bk-top" type="button" aria-label="Наверх">↑</button>
     <dialog id="bk-auth-modal" class="bk-auth-modal">
       <form method="dialog" class="bk-auth-modal__dialog">
-        <button class="bk-auth-modal__close" aria-label="Закрыть">✕</button>
+        <button class="bk-auth-modal__close" type="button" aria-label="Закрыть">✕</button>
         <div class="bk-auth-modal__grid">
           <div class="bk-auth-modal__copy">
             <p class="bk-auth-modal__eyebrow">Микс событий</p>
@@ -96,11 +104,11 @@
           <div class="bk-auth-modal__form">
             <label>
               Email
-              <input type="email" name="email" placeholder="hi@event.example" required>
+              <input type="email" name="email" placeholder="hi@event.example…" autocomplete="email" inputmode="email" spellcheck="false" required>
             </label>
             <label>
               Пароль
-              <input type="password" name="password" placeholder="минимум 8 символов" required>
+              <input type="password" name="password" placeholder="минимум 8 символов…" autocomplete="current-password" required>
             </label>
             <div class="bk-auth-modal__actions">
               <button type="submit" class="bk-button">Войти</button>

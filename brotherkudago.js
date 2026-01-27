@@ -237,6 +237,22 @@
     favsOnly: "bk:favsOnly",
   };
 
+  function readFavsOnlyFromUrl() {
+    if (typeof window === "undefined") return null;
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has("favs")) return null;
+    const raw = params.get("favs");
+    return raw === "1" || raw === "true";
+  }
+
+  function syncFavsOnlyUrl(isFavsOnly) {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    if (isFavsOnly) url.searchParams.set("favs", "1");
+    else url.searchParams.delete("favs");
+    window.history.replaceState({}, "", url);
+  }
+
   function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -359,7 +375,7 @@
       .replaceAll("'", "&#39;");
   }
 
-  function eventToCardHtml(event, { isFav }) {
+  function eventToCardHtml(event, { isFav, isHighPriority }) {
     const starts = parseDate(event.startsAt);
     const startTime = starts ? formatTime(starts) : "";
     const dayDelta = starts ? daysFromNow(starts) : null;
@@ -372,9 +388,13 @@
       .join("");
 
     const imageSrc = event.image || FALLBACK_IMAGE;
-    const imageHtml = `<img src="${escapeHtml(imageSrc)}" alt="" width="1200" height="900" loading="lazy" onerror="this.onerror=null;this.src='${escapeHtml(
+    const loading = isHighPriority ? "eager" : "lazy";
+    const fetchPriority = isHighPriority ? ' fetchpriority="high"' : "";
+    const imageHtml = `<img src="${escapeHtml(
+      imageSrc
+    )}" alt="" width="1200" height="900" loading="${loading}" decoding="async"${fetchPriority} data-fallback="${escapeHtml(
       FALLBACK_IMAGE
-    )}';">`;
+    )}">`;
 
     return `
       <article class="bk-card" data-id="${escapeHtml(event.id)}">
@@ -411,9 +431,11 @@
 
     const tags = Array.isArray(event.tags) ? event.tags : [];
     const imageSrc = event.image || FALLBACK_IMAGE;
-    const imageHtml = `<img src="${escapeHtml(imageSrc)}" alt="" width="1200" height="900" loading="lazy" onerror="this.onerror=null;this.src='${escapeHtml(
+    const imageHtml = `<img src="${escapeHtml(
+      imageSrc
+    )}" alt="" width="1200" height="900" loading="lazy" decoding="async" data-fallback="${escapeHtml(
       FALLBACK_IMAGE
-    )}';">`;
+    )}">`;
 
     const address = event.address ? ` · ${escapeHtml(event.address)}` : "";
 
@@ -472,11 +494,16 @@
   const state = {
     pageSize: 9,
     rendered: 0,
-    favsOnly: readBool(LS.favsOnly, false),
+    favsOnly: readFavsOnlyFromUrl() ?? readBool(LS.favsOnly, false),
     favs: readFavs(),
     modalEventId: null,
     curatedQueue: createCuratedQueue(),
   };
+
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function setStatus(text) {
     if (!dom.status) return;
@@ -526,8 +553,11 @@
     }
 
     const htmlParts = [];
-    for (const event of slice) {
-      htmlParts.push(eventToCardHtml(event, { isFav: state.favs.has(event.id) }));
+    for (const [index, event] of slice.entries()) {
+      const isHighPriority = state.rendered === 0 && index < 2;
+      htmlParts.push(
+        eventToCardHtml(event, { isFav: state.favs.has(event.id), isHighPriority })
+      );
     }
 
     dom.list.insertAdjacentHTML("beforeend", htmlParts.join(""));
@@ -600,13 +630,27 @@
   function init() {
     if (!dom.list || !dom.favsToggle) return;
 
+    document.addEventListener(
+      "error",
+      (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLImageElement)) return;
+        const fallback = target.dataset.fallback;
+        if (!fallback || target.src === fallback) return;
+        target.src = fallback;
+      },
+      true
+    );
+
     updateFavsCount();
     applyFavsOnly();
+    syncFavsOnlyUrl(state.favsOnly);
     renderNextPage({ reset: true });
 
     dom.favsToggle.addEventListener("click", () => {
       state.favsOnly = !state.favsOnly;
       writeBool(LS.favsOnly, state.favsOnly);
+      syncFavsOnlyUrl(state.favsOnly);
       rerender({ keepScroll: false });
     });
 
@@ -690,7 +734,9 @@
     window.addEventListener("scroll", onScroll, { passive: true });
 
     if (dom.toTop) {
-      dom.toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+      dom.toTop.addEventListener("click", () =>
+        window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" })
+      );
     }
   }
 
