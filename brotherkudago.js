@@ -371,7 +371,7 @@
 
     const imageHtml = event.image
       ? `<img src="${escapeHtml(event.image)}" alt="">`
-      : "";
+      : `<div class="bk-card__placeholder"><span>Фото скоро</span></div>`;
 
     return `
       <article class="bk-card" data-id="${escapeHtml(event.id)}">
