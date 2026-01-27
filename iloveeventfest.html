@@ -1,0 +1,122 @@
+<!doctype html>
+    <html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ОКОЛО — подборка мероприятий</title>
+    <meta
+      name="description"
+      content="ОКОЛО — бесконечная лента городских идей и событий. Сохраняй избранное, общайся и собирай свой досуг."
+    >
+    <link rel="icon" type="image/png" href="./iloveeventfest_files/Logo-32x32-CtMOuIU1.png">
+    <link rel="stylesheet" href="./brotherkudago.css">
+    <meta name="color-scheme" content="dark">
+  </head>
+  <body>
+    <header class="bk-header">
+      <div class="bk-header__inner">
+        <a class="bk-brand" href="./iloveeventfest.html" aria-label="На главную">
+          <span class="bk-logo-icon">О</span>
+          <div class="bk-brand__text">
+            <span class="bk-brand__primary">ОКОЛО</span>
+            <span class="bk-brand__secondary">люди, места, знакомства</span>
+          </div>
+        </a>
+        <nav class="bk-nav" aria-label="Навигация">
+        <a class="bk-cta-top" href="https://t.me/okolodating_bot" target="_blank" rel="noopener" aria-label="Написать боту">
+          <span class="bk-cta-top__logo" aria-hidden="true">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Telegram_2019_Logo.svg" alt="">
+          </span>
+          <span>Не хочешь идти один?</span>
+        </a>
+          <button class="bk-pill" id="bk-profile-open" type="button">Профиль</button>
+          <button class="bk-pill" id="bk-favs-toggle" type="button" aria-pressed="false">
+            Избранное <span id="bk-favs-count">0</span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="bk-main">
+      <section class="bk-hero">
+        <div>
+          <p class="bk-hero__eyebrow">Карточки событий</p>
+          <h1>Без огромного фильтра: листай ленту, открывай детали и сохраняй то, что понравилось.</h1>
+          <p class="bk-hero__lead">Каждая карточка — приглашение к новым людям, местам и знакомствам. Сегодня — свидание в гончарной, завтра — дуэт на камерном концерте.</p>
+          <div class="bk-hero__actions">
+            <a class="bk-hero__cta" href="https://t.me/okolodating_bot" target="_blank" rel="noopener">Открыть ленту</a>
+            <span class="bk-hero__hint">или напиши в Telegram, чтобы найти компанию прямо сейчас</span>
+          </div>
+        </div>
+      </section>
+      <section class="bk-feed" aria-label="Список событий">
+        <div id="bk-list" class="bk-list"></div>
+        <div class="bk-status-wrapper">
+          <div id="bk-status" class="bk-status" aria-live="polite">Собираем идеи вокруг города.</div>
+        </div>
+      </section>
+      <section class="bk-bot">
+        <div class="bk-bot__content">
+          <p class="bk-bot__eyebrow">ОКОЛО</p>
+          <h2>Бот подскажет, куда идти — и с кем</h2>
+          <p>Помогает найти интересные городские активности (свидания, прогулки, встречи, выставки) в стиле “что сделать рядом”.</p>
+          <p>Сохраняет любимые карточки и подстраивает подборки под настроение: “поесть”, “погулять”, “встреча в гончарной”.</p>
+          <p>Собирает удобный список “идей на сегодня” и умеет напомнить близким, чтобы не ходить одному.</p>
+        </div>
+        <a class="bk-bot__cta" href="https://t.me/okolodating_bot" target="_blank" rel="noopener">
+          <span class="bk-bot__cta-logo" aria-hidden="true"></span>
+          Добавить @okolodating_bot
+        </a>
+      </section>
+    </main>
+
+    <footer class="bk-site-footer">
+      <div class="bk-footer-grid">
+        <div class="bk-footer-card">
+          <div class="bk-footer-card__brand">
+            <div class="bk-logo-icon">О</div>
+            <div class="bk-footer-card__tagline">
+              <a href="https://t.me/okolodating_bot" target="_blank" rel="noopener" class="bk-footer-tg">мы тут!</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <dialog id="bk-modal" class="bk-modal">
+      <form id="bk-modal-form" method="dialog" class="bk-modal__dialog">
+        <div id="bk-modal-body"></div>
+      </form>
+    </dialog>
+
+    <button id="bk-top" class="bk-top" type="button" aria-label="Наверх">↑</button>
+    <dialog id="bk-auth-modal" class="bk-auth-modal">
+      <form method="dialog" class="bk-auth-modal__dialog">
+        <button class="bk-auth-modal__close" aria-label="Закрыть">✕</button>
+        <div class="bk-auth-modal__grid">
+          <div class="bk-auth-modal__copy">
+            <p class="bk-auth-modal__eyebrow">Микс событий</p>
+            <h3>Войдите, чтобы сохранять подборки и синхронизировать избранное.</h3>
+            <p>Пока всё хранится локально, но в будущем обязательно привяжем личные кабинеты, распределённые подборки и напоминания.</p>
+          </div>
+          <div class="bk-auth-modal__form">
+            <label>
+              Email
+              <input type="email" name="email" placeholder="hi@event.example" required>
+            </label>
+            <label>
+              Пароль
+              <input type="password" name="password" placeholder="минимум 8 символов" required>
+            </label>
+            <div class="bk-auth-modal__actions">
+              <button type="submit" class="bk-button">Войти</button>
+              <button type="button" class="bk-button bk-button--ghost" data-register>Регистрация</button>
+            </div>
+            <p class="bk-auth-modal__tip">Этот прототип пока не отправляет запросы — данные будут выгружены в реальный аккаунт позже.</p>
+          </div>
+        </div>
+      </form>
+    </dialog>
+    <script src="./brotherkudago.js" defer></script>
+  </body>
+</html>
