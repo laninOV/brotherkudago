@@ -8,14 +8,17 @@
       name="description"
       content="ОКОЛО — бесконечная лента городских идей и событий. Сохраняй избранное, общайся и собирай свой досуг."
     >
-    <meta name="theme-color" content="#0c0c12">
+    <meta name="theme-color" content="#f6f8fb">
     <link rel="icon" type="image/png" href="./iloveeventfest_files/Logo-32x32-CtMOuIU1.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Sora:wght@400;500;600;700;800&display=swap">
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
     <link rel="preconnect" href="https://avatars.mds.yandex.net" crossorigin>
     <link rel="preconnect" href="https://static.tildacdn.com" crossorigin>
     <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
     <link rel="stylesheet" href="./brotherkudago.css">
-    <meta name="color-scheme" content="dark">
+    <meta name="color-scheme" content="light">
   </head>
   <body>
     <a class="bk-skip" href="#main">Перейти к контенту</a>
@@ -25,7 +28,7 @@
           <span class="bk-logo-icon">О</span>
           <div class="bk-brand__text">
             <span class="bk-brand__primary">ОКОЛО</span>
-            <span class="bk-brand__secondary">метса,люди, знакомтсва</span>
+            <span class="bk-brand__secondary">места, люди, знакомства</span>
           </div>
         </a>
         <nav class="bk-nav" aria-label="Навигация">
@@ -39,13 +42,23 @@
 
     <main id="main" class="bk-main">
       <section class="bk-hero">
-        <div>
-          <h1 class="bk-sr-only">ОКОЛО — подборка мероприятий</h1>
+        <div class="bk-hero__copy">
+          <p class="bk-hero__eyebrow">ОКОЛО</p>
+          <h1>Городская лента идей, где всегда есть с кем и куда.</h1>
+          <p class="bk-hero__lead">Собираем атмосферные встречи, прогулки и свидания поблизости. Сохраняйте идеи, выбирайте настроение и находите компанию без шумных афиш.</p>
           <div class="bk-hero__actions">
             <a class="bk-hero__cta" href="https://t.me/okolodating_bot" target="_blank" rel="noopener">Пойдём вместе?</a>
-            <span class="bk-hero__hint">Заходи в Telegram, чтобы найти компанию прямо сейчас</span>
+            <a class="bk-hero__ghost" href="#bk-list">Смотреть ленту</a>
           </div>
+          <div class="bk-hero__chips">
+            <span class="bk-chip">Поужинать</span>
+            <span class="bk-chip">Прогулка</span>
+            <span class="bk-chip">Мастерская</span>
+            <span class="bk-chip">Выставка</span>
+          </div>
+          <span class="bk-hero__hint">Заходи в Telegram, чтобы найти компанию прямо сейчас</span>
         </div>
+        <div class="bk-hero__orb" aria-hidden="true"></div>
       </section>
       <section class="bk-feed" aria-label="Список событий">
         <h2 class="bk-sr-only">Лента событий</h2>
@@ -53,19 +66,6 @@
         <div class="bk-status-wrapper">
           <div id="bk-status" class="bk-status" aria-live="polite">Собираем идеи вокруг города…</div>
         </div>
-      </section>
-      <section class="bk-bot">
-        <div class="bk-bot__content">
-          <p class="bk-bot__eyebrow">ОКОЛО</p>
-          <h2>Бот подскажет, куда идти — и с кем</h2>
-          <p>Помогает найти интересные городские активности (свидания, прогулки, встречи, выставки) в стиле “что сделать рядом”.</p>
-          <p>Сохраняет любимые карточки и подстраивает подборки под настроение: “поесть”, “погулять”, “встреча в гончарной”.</p>
-          <p>Собирает удобный список “идей на сегодня” и умеет напомнить близким, чтобы не ходить одному.</p>
-        </div>
-        <a class="bk-bot__cta" href="https://t.me/okolodating_bot" target="_blank" rel="noopener">
-          <span class="bk-bot__cta-logo" aria-hidden="true"></span>
-          Добавить @okolodating_bot
-        </a>
       </section>
     </main>
 
@@ -80,7 +80,6 @@
             </div>
           </div>
           <p class="bk-footer-card__copy">Пиши сюда с предложениями, идеями и актуальными датами — мы внимательно подхватываем любой инфопоток.</p>
-          <p class="bk-footer-card__sub">Сайт серьёзный: проверяем каждую карточку и предпочитаем живые встречи, а не распиаренные шумные события.</p>
         </div>
       </div>
     </footer>
