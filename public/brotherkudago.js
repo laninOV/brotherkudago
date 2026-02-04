@@ -1,6 +1,30 @@
 (function () {
   "use strict";
 
+  // Keep hero height correct across devices: match CSS --bk-header-h to actual header height.
+  (function syncHeaderHeight() {
+    const header = document.querySelector(".bk-header");
+    if (!header) return;
+
+    let t = null;
+    const set = () => {
+      document.documentElement.style.setProperty(
+        "--bk-header-h",
+        `${header.offsetHeight}px`
+      );
+    };
+
+    set();
+    window.addEventListener(
+      "resize",
+      () => {
+        if (t) window.clearTimeout(t);
+        t = window.setTimeout(set, 120);
+      },
+      { passive: true }
+    );
+  })();
+
   /**
    * Модель события (карточки):
    * - id: string
@@ -17,9 +41,69 @@
    * - url?: string
    */
 
-  const FALLBACK_IMAGE = "./15e5cdd2-9c73-496e-859f-66a1dc59b84f.png";
+  const FALLBACK_IMAGE = "/15e5cdd2-9c73-496e-859f-66a1dc59b84f.png";
 
-  const EVENTS = [
+  // Temporary: 9 mock cards for layout/debugging.
+  // Flip to false when you want the real list back.
+  const USE_PLACEHOLDER_EVENTS = true;
+
+  function makePlaceholderEvents(count) {
+    const base = new Date("2026-02-01T18:00:00+03:00");
+    const images = [
+      "/assets/gonzo/photos/dsc01743.jpg",
+      FALLBACK_IMAGE,
+      "/assets/gonzo/photos/dsc01743.jpg",
+    ];
+
+    const titles = [
+      "Камерный концерт: встреча",
+      "Гончарная: свидание",
+      "Выставка без спешки",
+      "Прогулка и кофе",
+      "Кино + обсуждение",
+      "Лекция и вопросы",
+      "Маркет и находки",
+      "Импровизация в баре",
+      "Танцы для новичков",
+    ];
+
+    const tags = [
+      ["встреча", "музыка", "лайт"],
+      ["свидание", "мастерская", "уют"],
+      ["выставка", "арт", "тихо"],
+      ["прогулка", "кофе", "разговоры"],
+      ["кино", "обсуждение", "вечер"],
+      ["лекция", "люди", "идеи"],
+      ["маркет", "ремесло", "подарки"],
+      ["импровизация", "бар", "смех"],
+      ["танцы", "новички", "вечеринка"],
+    ];
+
+    const result = [];
+    for (let i = 0; i < count; i++) {
+      const d = new Date(base.getTime() + i * 24 * 60 * 60 * 1000);
+      d.setHours(18 + (i % 3), 0, 0, 0);
+      result.push({
+        id: `mock-${String(i + 1).padStart(2, "0")}`,
+        title: titles[i % titles.length],
+        startsAt: d.toISOString(),
+        city: "Москва",
+        venue: ["ОКОЛО", "Тёплое место", "Новый зал"][i % 3],
+        address: "",
+        price: i % 4 === 0 ? { min: 0, currency: "RUB" } : { min: 900 + i * 150, currency: "RUB" },
+        tags: tags[i % tags.length],
+        image: images[i % images.length],
+        description:
+          i % 2 === 0
+            ? "Плейсхолдер для отладки карточек. Тут будет описание события, чтобы проверить переносы и высоту блока."
+            : "Плейсхолдер карточки для дизайна и взаимодействия (избранное, модалка, кнопки).",
+        url: "https://t.me/okolodating_bot",
+      });
+    }
+    return result;
+  }
+
+  const REAL_EVENTS = [
     {
       id: "evt-201",
       title: "Мюзикл «Вальс-Бостон»",
@@ -232,6 +316,8 @@
     },
   ];
 
+  const EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(9) : REAL_EVENTS;
+
   const LS = {
     favs: "bk:favs",
     favsOnly: "bk:favsOnly",
@@ -375,9 +461,42 @@
       .replaceAll("'", "&#39;");
   }
 
+  const CTA_LABELS = [
+    "тык",
+    "пуньк",
+    "жмак",
+    "клик",
+    "щёлк",
+    "заглянуть",
+    "посмотреть",
+    "узнать",
+    "взглянуть",
+    "проверить",
+  ];
+
+  function hashString(text) {
+    let hash = 0;
+    for (let i = 0; i < text.length; i += 1) {
+      hash = (hash * 31 + text.charCodeAt(i)) >>> 0;
+    }
+    return hash;
+  }
+
+  function pickCtaLabel(eventId) {
+    const idx = hashString(eventId) % CTA_LABELS.length;
+    return CTA_LABELS[idx];
+  }
+
+  function truncate(text, max) {
+    const value = String(text || "").trim();
+    if (value.length <= max) return value;
+    return `${value.slice(0, max - 1)}…`;
+  }
+
   function eventToCardHtml(event, { isFav, isHighPriority }) {
     const starts = parseDate(event.startsAt);
     const startTime = starts ? formatTime(starts) : "";
+    const dayTitle = starts ? humanDayTitle(starts) : "Дата не указана";
     const dayDelta = starts ? daysFromNow(starts) : null;
     const hot = typeof dayDelta === "number" && dayDelta >= 0 && dayDelta <= 1;
 
@@ -396,24 +515,39 @@
       FALLBACK_IMAGE
     )}">`;
 
+    const ctaLabel = pickCtaLabel(event.id);
+    const description = truncate(event.description || "", 140);
+    const showSticker = hashString(event.id) % 7 === 0;
+    const stickerHtml = showSticker
+      ? `<img class="bk-card__sticker" src="/iloveeventfest_files/sticker-cat-scream.svg" alt="" aria-hidden="true">`
+      : "";
+
     return `
       <article class="bk-card" data-id="${escapeHtml(event.id)}">
         <div class="bk-card__media">
           ${imageHtml}
+          ${stickerHtml}
           <button class="bk-card__fav" type="button" aria-label="В избранное" aria-pressed="${
             isFav ? "true" : "false"
           }" data-action="fav">❤</button>
         </div>
         <div class="bk-card__body">
           <h3 class="bk-card__title">${escapeHtml(event.title)}</h3>
-          <div class="bk-meta">
-            <span class="bk-meta__item">🕒 ${escapeHtml(startTime || "—")}</span>
-            <span class="bk-meta__item">📍 ${escapeHtml(event.city)}</span>
-            <span class="bk-meta__item">🎟️ ${escapeHtml(formatPrice(event.price))}</span>
+          <div class="bk-card__meta">
+            <div class="bk-meta">
+              <span class="bk-meta__item">📅 ${escapeHtml(dayTitle)}</span>
+              <span class="bk-meta__item">🕒 ${escapeHtml(startTime || "—")}</span>
+              <span class="bk-meta__item">🎟️ ${escapeHtml(formatPrice(event.price))}</span>
+            </div>
+            <div class="bk-meta">
+              <span class="bk-meta__item">📍 ${escapeHtml(event.city)}</span>
+              <span class="bk-meta__item">🏛️ ${escapeHtml(event.venue)}</span>
+            </div>
           </div>
+          <p class="bk-card__desc">${escapeHtml(description || "Описание скоро появится.")}</p>
           <div class="bk-tags">${tagHtml}</div>
     <div class="bk-card__actions">
-      <button class="bk-button" type="button" data-action="open">Подробнее</button>
+      <button class="bk-button" type="button" data-action="open">${escapeHtml(ctaLabel)}</button>
     </div>
   </div>
 </article>

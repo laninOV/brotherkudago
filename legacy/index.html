@@ -1,0 +1,180 @@
+<!doctype html>
+    <html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ОКОЛО — подборка мероприятий</title>
+    <meta
+      name="description"
+      content="ОКОЛО — бесконечная лента городских идей и событий. Сохраняй избранное, общайся и собирай свой досуг."
+    >
+    <meta name="theme-color" content="#f6efe3">
+    <link rel="icon" type="image/png" href="./iloveeventfest_files/Logo-32x32-CtMOuIU1.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Shrikhand&family=Xanh+Mono&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Shantell+Sans:ital,wght@0,300..800;1,300..800&display=swap">
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+    <link rel="preconnect" href="https://avatars.mds.yandex.net" crossorigin>
+    <link rel="preconnect" href="https://static.tildacdn.com" crossorigin>
+    <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
+    <link rel="stylesheet" href="./brotherkudago.css?v=20260130-48">
+    <meta name="color-scheme" content="light">
+  </head>
+  <body>
+    <a class="bk-skip" href="#main">Перейти к контенту</a>
+	    <header class="bk-header">
+	      <div class="bk-header__inner">
+	        <nav class="bk-nav bk-nav--left" aria-label="Разделы">
+	          <a class="bk-nav__link" href="#how">Как это работает?</a>
+	          <a class="bk-nav__link" href="#events">Лента</a>
+	        </nav>
+
+	        <a class="bk-brand" href="./iloveeventfest.html" aria-label="На главную">
+	          <span class="bk-brand__wordmark">ОКОЛО</span>
+	          <span class="bk-brand__tagline">места люди знакомства</span>
+	        </a>
+
+	        <div class="bk-nav bk-nav--right" aria-label="Действия">
+	          <a class="bk-pill bk-pill--cta" href="https://t.me/okolodating_bot" target="_blank" rel="noopener">Не с кем пойти?</a>
+	        </div>
+	      </div>
+	    </header>
+
+    <main id="main" class="bk-main">
+	      <section class="bk-hero bk-hero--gonzo" aria-label="Главный экран">
+	        <div class="bk-hero__inner">
+	          <div class="bk-hero__copy">
+	            <h1 class="bk-hero__title">Время не ждёт — открой что-то новое!</h1>
+	            <p class="bk-hero__lead">Не упустите шанс узнать о самых интересных местах и событиях вокруг.</p>
+	            <a class="bk-hero__cta" href="https://t.me/okolodating_bot" target="_blank" rel="noopener">Пойдём вместе?</a>
+	          </div>
+	          <div class="bk-hero__art" aria-hidden="true">
+	            <img class="bk-hero__sun" src="./солнышко image_1769856424448.png" alt="" width="1120" height="928" loading="eager" decoding="async" fetchpriority="high">
+	            <img class="bk-hero__flower" src="./freepik_br_ed8a600f-0fae-4edc-9ee2-fd1d684aa2a2.png" alt="" width="1152" height="896" loading="eager" decoding="async" fetchpriority="high">
+	          </div>
+	        </div>
+	        <a class="bk-scrollhint" href="#events" aria-label="Прокрутить вниз к ленте">
+	          <span class="bk-scrollhint__text">листай вниз</span>
+	          <svg class="bk-scrollhint__arrow" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+	            <path d="M14 26c8 10 18 18 18 18s10-8 18-18" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+	            <path d="M32 18v26" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+	          </svg>
+	        </a>
+	        <section class="bk-marquee" aria-label="Лента слоганов">
+	          <div class="bk-marquee__track" aria-hidden="true">
+	            <span>МЕСТА • ЛЮДИ • ЗНАКОМСТВА • МЕСТА • ЛЮДИ • ЗНАКОМСТВА • МЕСТА • ЛЮДИ • ЗНАКОМСТВА • МЕСТА • ЛЮДИ • ЗНАКОМСТВА •</span>
+	            <span aria-hidden="true">МЕСТА • ЛЮДИ • ЗНАКОМСТВА • МЕСТА • ЛЮДИ • ЗНАКОМСТВА • МЕСТА • ЛЮДИ • ЗНАКОМСТВА • МЕСТА • ЛЮДИ • ЗНАКОМСТВА •</span>
+	          </div>
+	        </section>
+	      </section>
+
+	      <section id="events" class="bk-feed bk-feed--checkered" aria-label="Список событий">
+	        <div class="bk-feed__inner">
+	          <h2 class="bk-sr-only">Лента событий</h2>
+	          <div id="bk-list" class="bk-list"></div>
+	          <div class="bk-status-wrapper">
+	            <div id="bk-status" class="bk-status" aria-live="polite">Собираем идеи вокруг города…</div>
+	          </div>
+	        </div>
+	      </section>
+
+	      <section class="bk-marquee" aria-label="Лента слоганов">
+	        <div class="bk-marquee__track" aria-hidden="true">
+	          <span>МЕСТА • ЛЮДИ • ЗНАКОМСТВА • МЕСТА • ЛЮДИ • ЗНАКОМСТВА • МЕСТА • ЛЮДИ • ЗНАКОМСТВА • МЕСТА • ЛЮДИ • ЗНАКОМСТВА •</span>
+	          <span aria-hidden="true">МЕСТА • ЛЮДИ • ЗНАКОМСТВА • МЕСТА • ЛЮДИ • ЗНАКОМСТВА • МЕСТА • ЛЮДИ • ЗНАКОМСТВА • МЕСТА • ЛЮДИ • ЗНАКОМСТВА •</span>
+	        </div>
+	      </section>
+
+	      <section id="about" class="bk-about-simple" aria-label="О проекте">
+	        <div class="bk-about-simple__inner">
+	          <div class="bk-about-simple__grid">
+	            <div class="bk-about-simple__copy">
+	              <h2>ОКОЛО — это про людей</h2>
+	              <p>ОКОЛО помогает выбраться из дома и открыть что-то новое рядом.</p>
+	              <p>Листай ленту событий, сохраняй то, что нравится, и собирай свой план на неделю.</p>
+	              <p>А если хочется пойти не одному — заходи в Telegram: найдём компанию и подберём идею под настроение.</p>
+	            </div>
+	            <div class="bk-about-simple__aside" aria-hidden="true">
+	              <img class="bk-about-simple__art" src="./assets/gonzo/icons/group-56.png" alt="" width="284" height="628" loading="lazy" decoding="async">
+	            </div>
+	          </div>
+	        </div>
+	      </section>
+
+	      <section id="how" class="bk-services" aria-label="Как это работает">
+	        <h2 class="bk-services__title">Три простых шага</h2>
+	        <div class="bk-services__grid">
+	          <article class="bk-service-card" style="--bk-card-accent: var(--bk-accent-2);">
+	            <img class="bk-service-card__icon" src="./assets/gonzo/icons/group-56.png" alt="" width="84" height="84" loading="lazy" decoding="async">
+	            <h3>Листай</h3>
+	            <p>Находи мероприятия в ленте — быстро и без лишних настроек.</p>
+	          </article>
+	          <article class="bk-service-card" style="--bk-card-accent: var(--bk-accent-1);">
+	            <img class="bk-service-card__icon" src="./assets/gonzo/icons/daisy.svg" alt="" width="88" height="88" loading="lazy" decoding="async">
+	            <h3>Сохраняй</h3>
+	            <p>Добавляй карточки в избранное, чтобы собрать свой список.</p>
+	          </article>
+	          <article class="bk-service-card" style="--bk-card-accent: #2a82b6;">
+	            <img class="bk-service-card__icon" src="./assets/gonzo/icons/group-64.png" alt="" width="84" height="84" loading="lazy" decoding="async">
+	            <h3>Иди</h3>
+	            <p>Если не хочешь идти один — заходи в Telegram и обязательно найдёшь классную компанию.</p>
+	          </article>
+	        </div>
+	      </section>
+
+	      <!-- Лента событий перенесена выше (сразу после hero) -->
+    </main>
+
+	    <footer class="bk-site-footer" aria-label="Подвал">
+	      <div class="bk-site-footer__inner">
+	        <img class="bk-site-footer__sticker" src="./главный цветок!.png" alt="" aria-hidden="true" width="1152" height="896" loading="lazy" decoding="async">
+	        <div class="bk-site-footer__content">
+	          <div class="bk-site-footer__marks" aria-hidden="true">
+	            <div class="bk-site-footer__mark">О</div>
+	            <div class="bk-site-footer__mark bk-site-footer__mark--alt">Мы тут!</div>
+	          </div>
+	          <h2 class="bk-site-footer__title">Мы тут!</h2>
+	          <a href="https://t.me/okolodating_bot" target="_blank" rel="noopener" class="bk-site-footer__cta">Пиши в Telegram</a>
+	          <p class="bk-site-footer__copy">Пиши сюда с предложениями, идеями и актуальными датами — мы внимательно подхватываем любой инфопоток.</p>
+	        </div>
+	      </div>
+	    </footer>
+
+    <dialog id="bk-modal" class="bk-modal">
+      <form id="bk-modal-form" method="dialog" class="bk-modal__dialog">
+        <div id="bk-modal-body"></div>
+      </form>
+    </dialog>
+
+    <button id="bk-top" class="bk-top" type="button" aria-label="Наверх">↑</button>
+    <dialog id="bk-auth-modal" class="bk-auth-modal">
+      <form method="dialog" class="bk-auth-modal__dialog">
+        <button class="bk-auth-modal__close" type="button" aria-label="Закрыть">✕</button>
+        <div class="bk-auth-modal__grid">
+          <div class="bk-auth-modal__copy">
+            <p class="bk-auth-modal__eyebrow">Микс событий</p>
+            <h3>Войдите, чтобы сохранять подборки и синхронизировать избранное.</h3>
+            <p>Пока всё хранится локально, но в будущем обязательно привяжем личные кабинеты, распределённые подборки и напоминания.</p>
+          </div>
+          <div class="bk-auth-modal__form">
+            <label>
+              Email
+              <input type="email" name="email" placeholder="hi@event.example…" autocomplete="email" inputmode="email" spellcheck="false" required>
+            </label>
+            <label>
+              Пароль
+              <input type="password" name="password" placeholder="минимум 8 символов…" autocomplete="current-password" required>
+            </label>
+            <div class="bk-auth-modal__actions">
+              <button type="submit" class="bk-button">Войти</button>
+              <button type="button" class="bk-button bk-button--ghost" data-register>Регистрация</button>
+            </div>
+            <p class="bk-auth-modal__tip">Этот прототип пока не отправляет запросы — данные будут выгружены в реальный аккаунт позже.</p>
+          </div>
+        </div>
+      </form>
+    </dialog>
+    <script src="./brotherkudago.js?v=20260130-43" defer></script>
+  </body>
+</html>
