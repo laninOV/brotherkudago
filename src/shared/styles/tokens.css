@@ -1,0 +1,16 @@
+:root {
+  --retro-paper: #f6efe3;
+  --retro-ink: #2b2a29;
+  --retro-orange: #e24b2b;
+  --retro-mustard: #f2c14e;
+  --retro-olive: #7ea05a;
+  --retro-blue: #2a82b6;
+
+  --retro-shadow-sm: 0 8px 20px rgba(43, 42, 41, 0.12);
+  --retro-shadow-md: 0 16px 30px rgba(43, 42, 41, 0.16);
+  --retro-shadow-lg: 0 24px 44px rgba(43, 42, 41, 0.2);
+
+  --retro-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --retro-ease-soft: cubic-bezier(0.16, 0.84, 0.44, 1);
+  --retro-speed-marquee: 320s;
+}

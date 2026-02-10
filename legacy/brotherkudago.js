@@ -41,7 +41,7 @@
    * - url?: string
    */
 
-  const FALLBACK_IMAGE = "./15e5cdd2-9c73-496e-859f-66a1dc59b84f.png";
+  const FALLBACK_IMAGE = "./main-flower.png";
 
   // Temporary: 9 mock cards for layout/debugging.
   // Flip to false when you want the real list back.
@@ -50,9 +50,9 @@
   function makePlaceholderEvents(count) {
     const base = new Date("2026-02-01T18:00:00+03:00");
     const images = [
-      "./assets/gonzo/photos/dsc01743.jpg",
       FALLBACK_IMAGE,
-      "./assets/gonzo/photos/dsc01743.jpg",
+      FALLBACK_IMAGE,
+      FALLBACK_IMAGE,
     ];
 
     const titles = [

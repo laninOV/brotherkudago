@@ -1,5 +1,9 @@
 import Script from "next/script";
-import type { CSSProperties } from "react";
+import { AboutSection } from "@/features/site/sections/AboutSection";
+import { EventsSection } from "@/features/site/sections/EventsSection";
+import { HeroSection } from "@/features/site/sections/HeroSection";
+import { ServicesSection } from "@/features/site/sections/ServicesSection";
+import { SiteFooterSection } from "@/features/site/sections/SiteFooterSection";
 
 export default function Home() {
   return (
@@ -9,15 +13,27 @@ export default function Home() {
       </a>
       <header className="bk-header">
         <div className="bk-header__inner">
-          <nav className="bk-nav bk-nav--left" aria-label="Разделы">
-            <a className="bk-nav__link" href="#how">
-              Как это работает?
-            </a>
-            <a className="bk-nav__link" href="#events">
-              Лента
-            </a>
-          </nav>
+          <details className="bk-menu" aria-label="Меню">
+            <summary className="bk-menu__toggle" aria-label="Открыть меню">
+              <span className="bk-menu__bar" aria-hidden="true"></span>
+              <span className="bk-menu__bar" aria-hidden="true"></span>
+              <span className="bk-menu__bar" aria-hidden="true"></span>
+            </summary>
+            <div className="bk-menu__backdrop" data-menu-close aria-hidden="true"></div>
+            <div className="bk-menu__panel" role="navigation" aria-label="Разделы">
+              <button className="bk-menu__close" type="button" data-menu-close aria-label="Закрыть меню">
+                ✕
+              </button>
+              <a className="bk-nav__link" href="#how">
+                Как это работает?
+              </a>
+              <a className="bk-nav__link" href="#events">
+                Лента
+              </a>
+            </div>
+          </details>
 
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
           <a className="bk-brand" href="/" aria-label="На главную">
             <span className="bk-brand__wordmark">ОКОЛО</span>
             <span className="bk-brand__tagline">места люди знакомства</span>
@@ -30,6 +46,14 @@ export default function Home() {
               target="_blank"
               rel="noopener"
             >
+              <span className="bk-pill__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="img" focusable="false">
+                  <path
+                    d="M20.6 4.4c.3-.1.6 0 .8.2.2.2.3.5.2.8l-3 14c-.1.4-.4.6-.7.7-.3.1-.7 0-1-.2l-4.5-3.3-2.2 2.2c-.2.2-.4.3-.7.2-.3-.1-.4-.3-.4-.6l.1-3.2 8.2-7.3-9.2 6-3.6-1.1c-.4-.1-.6-.4-.6-.8s.3-.7.7-.8l15.9-6.3z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </span>
               Не с кем пойти?
             </a>
           </div>
@@ -37,90 +61,9 @@ export default function Home() {
       </header>
 
       <main id="main" className="bk-main">
-        <section className="bk-hero bk-hero--gonzo" aria-label="Главный экран">
-          <div className="bk-hero__inner">
-            <div className="bk-hero__copy">
-              <h1 className="bk-hero__title">Время не ждёт — открой что-то новое!</h1>
-              <p className="bk-hero__lead">
-                Не упустите шанс узнать о самых интересных местах и событиях вокруг.
-              </p>
-              <a
-                className="bk-hero__cta"
-                href="https://t.me/okolodating_bot"
-                target="_blank"
-                rel="noopener"
-              >
-                Пойдём вместе?
-              </a>
-            </div>
-            <div className="bk-hero__art" aria-hidden="true">
-              <img
-                className="bk-hero__sun"
-                src="/солнышко image_1769856424448.png"
-                alt=""
-                width={1120}
-                height={928}
-                loading="eager"
-                decoding="async"
-                fetchPriority="high"
-              />
-              <img
-                className="bk-hero__flower"
-                src="/freepik_br_ed8a600f-0fae-4edc-9ee2-fd1d684aa2a2.png"
-                alt=""
-                width={1152}
-                height={896}
-                loading="eager"
-                decoding="async"
-                fetchPriority="high"
-              />
-            </div>
-          </div>
-          <a className="bk-scrollhint" href="#events" aria-label="Прокрутить вниз к ленте">
-            <span className="bk-scrollhint__text">листай вниз</span>
-            <svg className="bk-scrollhint__arrow" viewBox="0 0 64 64" aria-hidden="true">
-              <path
-                d="M14 26c8 10 18 18 18 18s10-8 18-18"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M32 18v26"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="6"
-                strokeLinecap="round"
-              />
-            </svg>
-          </a>
-          <section className="bk-marquee" aria-label="Лента слоганов">
-            <div className="bk-marquee__track" aria-hidden="true">
-              <span>
-                МЕСТА • ЛЮДИ • ЗНАКОМСТВА • МЕСТА • ЛЮДИ • ЗНАКОМСТВА • МЕСТА • ЛЮДИ •
-                ЗНАКОМСТВА • МЕСТА • ЛЮДИ • ЗНАКОМСТВА •
-              </span>
-              <span aria-hidden="true">
-                МЕСТА • ЛЮДИ • ЗНАКОМСТВА • МЕСТА • ЛЮДИ • ЗНАКОМСТВА • МЕСТА • ЛЮДИ •
-                ЗНАКОМСТВА • МЕСТА • ЛЮДИ • ЗНАКОМСТВА •
-              </span>
-            </div>
-          </section>
-        </section>
+        <HeroSection />
 
-        <section id="events" className="bk-feed bk-feed--checkered" aria-label="Список событий">
-          <div className="bk-feed__inner">
-            <h2 className="bk-sr-only">Лента событий</h2>
-            <div id="bk-list" className="bk-list"></div>
-            <div className="bk-status-wrapper">
-              <div id="bk-status" className="bk-status" aria-live="polite">
-                Собираем идеи вокруг города…
-              </div>
-            </div>
-          </div>
-        </section>
+        <EventsSection />
 
         <section className="bk-marquee" aria-label="Лента слоганов">
           <div className="bk-marquee__track" aria-hidden="true">
@@ -135,114 +78,11 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="about" className="bk-about-simple" aria-label="О проекте">
-          <div className="bk-about-simple__inner">
-            <div className="bk-about-simple__grid">
-              <div className="bk-about-simple__copy">
-                <h2>ОКОЛО — это про людей</h2>
-                <p>ОКОЛО помогает выбраться из дома и открыть что-то новое рядом.</p>
-                <p>
-                  Листай ленту событий, сохраняй то, что нравится, и собирай свой план на неделю.
-                </p>
-                <p>
-                  А если хочется пойти не одному — заходи в Telegram: найдём компанию и подберём идею
-                  под настроение.
-                </p>
-              </div>
-              <div className="bk-about-simple__aside" aria-hidden="true">
-                <img
-                  className="bk-about-simple__art"
-                  src="/assets/gonzo/icons/group-56.png"
-                  alt=""
-                  width={284}
-                  height={628}
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-            </div>
-          </div>
-        </section>
+        <AboutSection />
 
-        <section id="how" className="bk-services" aria-label="Как это работает">
-          <h2 className="bk-services__title">Три простых шага</h2>
-          <div className="bk-services__grid">
-            <article className="bk-service-card" style={{ "--bk-card-accent": "var(--bk-accent-2)" } as CSSProperties}>
-              <img
-                className="bk-service-card__icon"
-                src="/два%20цветка.png"
-                alt=""
-                width={1088}
-                height={960}
-                loading="lazy"
-                decoding="async"
-              />
-              <h3>Листай</h3>
-              <p>Находи мероприятия в ленте — быстро и без лишних настроек.</p>
-            </article>
-            <article className="bk-service-card" style={{ "--bk-card-accent": "var(--bk-accent-1)" } as CSSProperties}>
-              <img
-                className="bk-service-card__icon"
-                src="/assets/gonzo/icons/daisy.svg"
-                alt=""
-                width={88}
-                height={88}
-                loading="lazy"
-                decoding="async"
-              />
-              <h3>Сохраняй</h3>
-              <p>Добавляй карточки в избранное, чтобы собрать свой список.</p>
-            </article>
-            <article className="bk-service-card" style={{ "--bk-card-accent": "#2a82b6" } as CSSProperties}>
-              <img
-                className="bk-service-card__icon"
-                src="/цветочек%20в%20очках!.png"
-                alt=""
-                width={1120}
-                height={928}
-                loading="lazy"
-                decoding="async"
-              />
-              <h3>Иди</h3>
-              <p>Если не хочешь идти один — заходи в Telegram и обязательно найдёшь классную компанию.</p>
-            </article>
-          </div>
-        </section>
+        <ServicesSection />
       </main>
-
-      <footer className="bk-site-footer" aria-label="Подвал">
-        <div className="bk-site-footer__inner">
-          <img
-            className="bk-site-footer__sticker"
-            src="/главный цветок!.png"
-            alt=""
-            aria-hidden="true"
-            width={1152}
-            height={896}
-            loading="lazy"
-            decoding="async"
-          />
-          <div className="bk-site-footer__content">
-            <div className="bk-site-footer__marks" aria-hidden="true">
-              <div className="bk-site-footer__mark">О</div>
-              <div className="bk-site-footer__mark bk-site-footer__mark--alt">Мы тут!</div>
-            </div>
-            <h2 className="bk-site-footer__title">Мы тут!</h2>
-            <a
-              href="https://t.me/okolodating_bot"
-              target="_blank"
-              rel="noopener"
-              className="bk-site-footer__cta"
-            >
-              Пиши в Telegram
-            </a>
-            <p className="bk-site-footer__copy">
-              Пиши сюда с предложениями, идеями и актуальными датами — мы внимательно подхватываем
-              любой инфопоток.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <SiteFooterSection />
 
       <dialog id="bk-modal" className="bk-modal">
         <form id="bk-modal-form" method="dialog" className="bk-modal__dialog">

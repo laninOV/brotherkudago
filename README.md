@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ОКОЛО (site + miniapp)
 
-## Getting Started
+Единый Next.js-проект, в котором:
+- сайт доступен на `/`
+- miniapp доступен на `/miniapp`
+- обе части читают карточки из одного API `/api/events`
 
-First, run the development server:
+## Run
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Открыть:
+- `http://localhost:3000/` — сайт
+- `http://localhost:3000/miniapp` — miniapp
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Architecture
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```text
+src/
+  app/
+    page.tsx                  # сайт
+    miniapp/
+      page.tsx                # вход miniapp
+      layout.tsx              # стили miniapp + leaflet css
+      miniapp.css
+    api/events/route.ts       # общий API карточек
+  features/
+    events/
+      types.ts                # доменные типы событий
+    site/
+      sections/               # hero/feed/about/services/footer
+    miniapp/
+      tabs/
+      ui/
+      state/
+      telegram/
+      data/                   # fallback набор для оффлайна
+  lib/
+    events-repo.ts            # DB + сид + фильтры + пагинация
+    events-db.ts              # совместимость (re-export)
+  shared/
+    styles/
+      tokens.css
+      effects.css
+      motion.css
+legacy/
+  pin-vite/                   # архив исходного Vite miniapp
+```
 
-## Learn More
+## Events API
 
-To learn more about Next.js, take a look at the following resources:
+`GET /api/events`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Query:
+- `limit`
+- `cursor`
+- `category` (`event|cafe|walk|place`)
+- `nearLat`, `nearLng`, `radiusKm`
+- `priceMax`
+- `datePreset` (`today|week|all`)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Response:
+- `events: EventRecord[]`
+- `pageInfo: { limit, hasMore, nextCursor }`
 
-## Deploy on Vercel
+## Notes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Блок бренда `.bk-brand` не трогается.
+- Miniapp получает данные из API, но имеет fallback на `src/features/miniapp/data/places.ts`.

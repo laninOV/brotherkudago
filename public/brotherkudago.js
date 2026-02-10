@@ -25,6 +25,35 @@
     );
   })();
 
+  (function menuDrawer() {
+    const menu = document.querySelector(".bk-menu");
+    if (!menu) return;
+
+    const closeMenu = () => {
+      if (menu.hasAttribute("open")) {
+        menu.removeAttribute("open");
+      }
+    };
+
+    menu.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (target.closest("[data-menu-close]")) {
+        closeMenu();
+      }
+    });
+
+    menu.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", closeMenu);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeMenu();
+      }
+    });
+  })();
+
   /**
    * Модель события (карточки):
    * - id: string
@@ -41,18 +70,17 @@
    * - url?: string
    */
 
-  const FALLBACK_IMAGE = "/15e5cdd2-9c73-496e-859f-66a1dc59b84f.png";
+  const FALLBACK_IMAGE = "/main-flower.png";
 
-  // Temporary: 9 mock cards for layout/debugging.
-  // Flip to false when you want the real list back.
-  const USE_PLACEHOLDER_EVENTS = true;
+  // Fallback mock cards for offline/dev only.
+  const USE_PLACEHOLDER_EVENTS = false;
 
   function makePlaceholderEvents(count) {
     const base = new Date("2026-02-01T18:00:00+03:00");
     const images = [
-      "/assets/gonzo/photos/dsc01743.jpg",
       FALLBACK_IMAGE,
-      "/assets/gonzo/photos/dsc01743.jpg",
+      FALLBACK_IMAGE,
+      FALLBACK_IMAGE,
     ];
 
     const titles = [
@@ -106,17 +134,18 @@
   const REAL_EVENTS = [
     {
       id: "evt-201",
-      title: "Мюзикл «Вальс-Бостон»",
-      startsAt: "2026-02-27T19:30:00+03:00",
+      title: "Кантина Tatooine: ужин и контактный бар",
+      startsAt: "2026-02-10T19:00:00+03:00",
       city: "Москва",
-      venue: "Москвич",
-      address: "Ленинградское шоссе, 80",
-      price: { min: 1500, max: 2600, currency: "RUB" },
-      tags: ["мюзикл", "ретро", "танцы"],
-      image: "https://static.tildacdn.com/tild6365-6236-4666-b261-656631333664/1.jpg",
+      venue: "Кантина | Ресторан-бар Tatooine",
+      address: "ул. Петровка, 23/10с5",
+      price: { min: 1500, max: 3000, currency: "RUB" },
+      tags: ["ресторан", "бар", "этническая музыка"],
+      image:
+        "https://scontent-fra3-1.cdninstagram.com/v/t51.82787-15/628060285_17851450998654319_3642420885353076683_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=103&ig_cache_key=MzgyNDMxOTg4Nzk4OTAzMDQ4OTE3ODUxNDUwOTkyNjU0MzE5.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjc2MHgxMzUwLnNkci5DMyJ9&_nc_ohc=e4ThFcL5xNAQ7kNvwHDvoJm&_nc_oc=AdmH5eoPNahUlFVnEQpq9uz2j70QXwjupMKCtJw8qMWx0hgSm8cPl8-QbSE0GVzhrhQTD1bN95eb-L5Vl599Zqmh&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-fra3-1.cdninstagram.com&_nc_gid=wE-kxWQk8B1EFM8dSLMhYA&oh=00_AfuXs_s4Qj5zjQaOzA-8JL-beLDTbfU9USr0DwXhIDW17w&oe=698B921E",
       description:
-        "Ретроспективный мюзикл, где оркестр живой и сцена превращается в шарманку танцпола — идеальное начало свидания.",
-      url: "https://vals-boston.ru",
+        "Еда — про память, напитки — про выбор. Контактный бар, этническая музыка, формат для новых знакомств. Профиль: instagram.com/tatooine.rest. Фото: instagram.com/p/DUStq0PDD5Z/ и instagram.com/p/DUN5jpzDE2-/",
+      url: "https://www.instagram.com/tatooine.rest/",
     },
     {
       id: "evt-202",
@@ -316,7 +345,7 @@
     },
   ];
 
-  const EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(9) : REAL_EVENTS;
+let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
 
   const LS = {
     favs: "bk:favs",
@@ -461,30 +490,12 @@
       .replaceAll("'", "&#39;");
   }
 
-  const CTA_LABELS = [
-    "тык",
-    "пуньк",
-    "жмак",
-    "клик",
-    "щёлк",
-    "заглянуть",
-    "посмотреть",
-    "узнать",
-    "взглянуть",
-    "проверить",
-  ];
-
   function hashString(text) {
     let hash = 0;
     for (let i = 0; i < text.length; i += 1) {
       hash = (hash * 31 + text.charCodeAt(i)) >>> 0;
     }
     return hash;
-  }
-
-  function pickCtaLabel(eventId) {
-    const idx = hashString(eventId) % CTA_LABELS.length;
-    return CTA_LABELS[idx];
   }
 
   function truncate(text, max) {
@@ -515,18 +526,14 @@
       FALLBACK_IMAGE
     )}">`;
 
-    const ctaLabel = pickCtaLabel(event.id);
     const description = truncate(event.description || "", 140);
-    const showSticker = hashString(event.id) % 7 === 0;
-    const stickerHtml = showSticker
-      ? `<img class="bk-card__sticker" src="/iloveeventfest_files/sticker-cat-scream.svg" alt="" aria-hidden="true">`
-      : "";
 
     return `
-      <article class="bk-card" data-id="${escapeHtml(event.id)}">
+      <article class="bk-card" data-id="${escapeHtml(event.id)}" data-action="open" role="button" tabindex="0" aria-label="${escapeHtml(
+      event.title
+    )}">
         <div class="bk-card__media">
           ${imageHtml}
-          ${stickerHtml}
           <button class="bk-card__fav" type="button" aria-label="В избранное" aria-pressed="${
             isFav ? "true" : "false"
           }" data-action="fav">❤</button>
@@ -539,22 +546,15 @@
               <span class="bk-meta__item">🕒 ${escapeHtml(startTime || "—")}</span>
               <span class="bk-meta__item">🎟️ ${escapeHtml(formatPrice(event.price))}</span>
             </div>
-            <div class="bk-meta">
-              <span class="bk-meta__item">📍 ${escapeHtml(event.city)}</span>
-              <span class="bk-meta__item">🏛️ ${escapeHtml(event.venue)}</span>
-            </div>
           </div>
           <p class="bk-card__desc">${escapeHtml(description || "Описание скоро появится.")}</p>
           <div class="bk-tags">${tagHtml}</div>
-    <div class="bk-card__actions">
-      <button class="bk-button" type="button" data-action="open">${escapeHtml(ctaLabel)}</button>
-    </div>
-  </div>
-</article>
+        </div>
+      </article>
     `;
   }
 
-  function eventToModalHtml(event, { isFav }) {
+  function eventToModalHtml(event, { isFav, canPrev, canNext }) {
     const starts = parseDate(event.startsAt);
     const ends = event.endsAt ? parseDate(event.endsAt) : null;
     const when = starts
@@ -576,15 +576,24 @@
     return `
       <div class="bk-modal__content">
         <button class="bk-modal__close" type="submit" value="close" aria-label="Закрыть">✕</button>
+        <button class="bk-modal__nav bk-modal__nav--prev" type="button" data-action="modal-prev" aria-label="Предыдущее событие" ${
+          canPrev ? "" : "disabled"
+        }>
+          <span aria-hidden="true">←</span>
+          <span>Назад</span>
+        </button>
+        <button class="bk-modal__nav bk-modal__nav--next" type="button" data-action="modal-next" aria-label="Следующее событие" ${
+          canNext ? "" : "disabled"
+        }>
+          <span>Вперёд</span>
+          <span aria-hidden="true">→</span>
+        </button>
         <div class="bk-modal__grid">
           <div class="bk-modal__image">${imageHtml}</div>
           <div>
             <h2 class="bk-modal__title">${escapeHtml(event.title)}</h2>
             <div class="bk-meta">
               <span class="bk-meta__item">📅 ${escapeHtml(when)}</span>
-              <span class="bk-meta__item">📍 ${escapeHtml(event.city)} · ${escapeHtml(
-      event.venue
-    )}${address}</span>
               <span class="bk-meta__item">🎟️ ${escapeHtml(formatPrice(event.price))}</span>
             </div>
             <p class="bk-modal__desc">${escapeHtml(event.description || "")}</p>
@@ -606,14 +615,59 @@
   function byStartsAtAsc(a, b) {
     const da = parseDate(a.startsAt)?.getTime() ?? Number.POSITIVE_INFINITY;
     const db = parseDate(b.startsAt)?.getTime() ?? Number.POSITIVE_INFINITY;
-    return da - db;
+    if (da !== db) return da - db;
+    return String(a.id).localeCompare(String(b.id), "ru-RU");
   }
 
-  const EVENTS_SORTED = EVENTS.slice().sort(byStartsAtAsc);
+  function normalizeEvent(raw, index) {
+    const id = typeof raw?.id === "string" && raw.id ? raw.id : `api-${index + 1}`;
+    const startsAt =
+      typeof raw?.startsAt === "string" && raw.startsAt
+        ? raw.startsAt
+        : new Date().toISOString();
+    return {
+      id,
+      title: typeof raw?.title === "string" ? raw.title : "Без названия",
+      startsAt,
+      endsAt: typeof raw?.endsAt === "string" ? raw.endsAt : undefined,
+      city: typeof raw?.city === "string" ? raw.city : "Москва",
+      venue: typeof raw?.venue === "string" ? raw.venue : "Локация",
+      address: typeof raw?.address === "string" ? raw.address : "",
+      price: raw?.price ?? undefined,
+      tags: Array.isArray(raw?.tags) ? raw.tags : [],
+      image: typeof raw?.image === "string" ? raw.image : FALLBACK_IMAGE,
+      description: typeof raw?.description === "string" ? raw.description : "",
+      url: typeof raw?.url === "string" ? raw.url : "https://t.me/okolodating_bot",
+    };
+  }
+
+  function normalizePagePayload(payload) {
+    const items = Array.isArray(payload?.events) ? payload.events : [];
+    const pageInfo = payload?.pageInfo ?? {};
+    return {
+      events: items.map(normalizeEvent),
+      pageInfo: {
+        hasMore: Boolean(pageInfo.hasMore),
+        nextCursor: typeof pageInfo.nextCursor === "string" ? pageInfo.nextCursor : null,
+      },
+    };
+  }
+
+  async function loadEventsPageFromApi({ cursor, limit }) {
+    const params = new URLSearchParams();
+    params.set("limit", String(limit));
+    if (cursor) params.set("cursor", cursor);
+    const res = await fetch(`/api/events?${params.toString()}`, { cache: "no-store" });
+    if (!res.ok) throw new Error(`Events API failed: ${res.status}`);
+    const payload = await res.json();
+    return normalizePagePayload(payload);
+  }
 
   const dom = {
     list: document.getElementById("bk-list"),
     status: document.getElementById("bk-status"),
+    pagination: document.getElementById("bk-pagination"),
+    filtersButton: document.getElementById("bk-filters-button"),
     favsToggle: document.getElementById("bk-favs-toggle"),
     favsCount: document.getElementById("bk-favs-count"),
     profileToggle: document.getElementById("bk-profile-open"),
@@ -626,12 +680,16 @@
   };
 
   const state = {
-    pageSize: 9,
-    rendered: 0,
+    pageSize: 12,
+    currentPage: 1,
     favsOnly: readFavsOnlyFromUrl() ?? readBool(LS.favsOnly, false),
     favs: readFavs(),
     modalEventId: null,
-    curatedQueue: createCuratedQueue(),
+    pageCache: new Map(),
+    pageCursorByPage: new Map([[1, null]]),
+    hasMoreByPage: new Map(),
+    useApi: true,
+    isLoadingPage: false,
   };
 
   const prefersReducedMotion =
@@ -654,50 +712,124 @@
     dom.favsToggle.setAttribute("aria-pressed", state.favsOnly ? "true" : "false");
   }
 
-  function getSourceEvents() {
-    const base = state.curatedQueue;
-    if (!state.favsOnly) return base;
-    return base.filter((e) => state.favs.has(e.id));
+  function getFallbackSourceEvents() {
+    return EVENTS.slice().sort(byStartsAtAsc);
   }
 
-  function renderNextPage({ reset }) {
-    if (!dom.list) return;
+  function getPageEvents(page) {
+    return state.pageCache.get(page) ?? [];
+  }
 
-    if (reset) {
-      dom.list.innerHTML = "";
-      state.rendered = 0;
+  function getVisibleEventsForCurrentPage() {
+    let events = getPageEvents(state.currentPage);
+    if (state.favsOnly) {
+      events = events.filter((event) => state.favs.has(event.id));
+    }
+    return events;
+  }
+
+  function findEventById(id) {
+    for (const pageEvents of state.pageCache.values()) {
+      const found = pageEvents.find((event) => event.id === id);
+      if (found) return found;
+    }
+    return EVENTS.find((event) => event.id === id);
+  }
+
+  async function ensurePageLoaded(page) {
+    if (state.pageCache.has(page)) return true;
+
+    if (!state.useApi) {
+      const source = getFallbackSourceEvents();
+      const offset = (page - 1) * state.pageSize;
+      const slice = source.slice(offset, offset + state.pageSize);
+      const hasMore = offset + state.pageSize < source.length;
+      state.pageCache.set(page, slice);
+      state.hasMoreByPage.set(page, hasMore);
+      if (hasMore) state.pageCursorByPage.set(page + 1, `local:${page + 1}`);
+      return slice.length > 0 || page === 1;
     }
 
-    const source = getSourceEvents();
-    const limit = state.pageSize;
-    const slice = source.slice(state.rendered, state.rendered + limit);
-    const moreLeft = source.length > state.rendered + slice.length;
+    const cursor = state.pageCursorByPage.get(page);
+    if (page !== 1 && typeof cursor !== "string") return false;
+
+    state.isLoadingPage = true;
+    try {
+      const payload = await loadEventsPageFromApi({
+        cursor: page === 1 ? null : cursor,
+        limit: state.pageSize,
+      });
+
+      state.pageCache.set(page, payload.events);
+      state.hasMoreByPage.set(page, payload.pageInfo.hasMore);
+      if (payload.pageInfo.hasMore && payload.pageInfo.nextCursor) {
+        state.pageCursorByPage.set(page + 1, payload.pageInfo.nextCursor);
+      }
+
+      return payload.events.length > 0 || page === 1;
+    } catch {
+      // Degrade gracefully to local fallback set if API is unavailable.
+      state.useApi = false;
+      state.pageCache.clear();
+      state.pageCursorByPage.clear();
+      state.hasMoreByPage.clear();
+      state.pageCursorByPage.set(1, null);
+      return ensurePageLoaded(page);
+    } finally {
+      state.isLoadingPage = false;
+    }
+  }
+
+  function renderPagination() {
+    if (!dom.pagination) return;
+    const current = state.currentPage;
+    const hasPrev = current > 1;
+    const hasNext = Boolean(
+      state.pageCache.has(current + 1) || state.hasMoreByPage.get(current)
+    );
+
+    dom.pagination.innerHTML = `
+      <button type="button" class="bk-pagination__nav" data-page-action="prev" ${hasPrev ? "" : "disabled"}>Туда</button>
+      <button type="button" class="bk-pagination__nav" data-page-action="next" ${hasNext ? "" : "disabled"}>Сюда</button>
+    `;
+  }
+
+  async function renderCurrentPage() {
+    if (!dom.list) return;
+    dom.list.innerHTML = "";
+
+    const loaded = await ensurePageLoaded(state.currentPage);
+    if (!loaded && state.currentPage > 1) {
+      state.currentPage -= 1;
+      return renderCurrentPage();
+    }
+
+    let slice = getPageEvents(state.currentPage);
+    if (state.favsOnly) {
+      slice = slice.filter((event) => state.favs.has(event.id));
+    }
 
     if (slice.length === 0) {
-      if (state.rendered === 0) {
-        setStatus(
-          state.favsOnly
-            ? "Пока пусто — добавь события в избранное."
-            : "Скоро появятся новые подборки."
-        );
-      } else {
-        setStatus("Это всё на сейчас.");
-      }
+      setStatus(
+        state.favsOnly
+          ? "Пока пусто — добавь события в избранное."
+          : "Скоро появятся новые подборки."
+      );
+      renderPagination();
       return;
     }
 
     const htmlParts = [];
     for (const [index, event] of slice.entries()) {
-      const isHighPriority = state.rendered === 0 && index < 2;
+      const isHighPriority = state.currentPage === 1 && index < 2;
       htmlParts.push(
         eventToCardHtml(event, { isFav: state.favs.has(event.id), isHighPriority })
       );
     }
 
     dom.list.insertAdjacentHTML("beforeend", htmlParts.join(""));
-    state.rendered += slice.length;
-
-    setStatus(moreLeft ? "Листай дальше — идей ещё много." : "Это всё на сейчас.");
+    setStatus(`Страница ${state.currentPage}`);
+    renderPagination();
   }
 
   function toggleFav(id) {
@@ -709,12 +841,23 @@
 
   function openModalFor(id) {
     if (!dom.modal || !dom.modalBody) return;
-    const event = EVENTS.find((e) => e.id === id);
+    const visibleEvents = getVisibleEventsForCurrentPage();
+    const list = visibleEvents.length > 0 ? visibleEvents : EVENTS;
+    const event = list.find((e) => e.id === id) ?? findEventById(id);
     if (!event) return;
+    const index = list.findIndex((e) => e.id === event.id);
+    const canPrev = index > 0;
+    const canNext = index >= 0 && index < list.length - 1;
     state.modalEventId = id;
-    dom.modalBody.innerHTML = eventToModalHtml(event, { isFav: state.favs.has(id) });
-    if (typeof dom.modal.showModal === "function") dom.modal.showModal();
-    else dom.modal.setAttribute("open", "open");
+    dom.modalBody.innerHTML = eventToModalHtml(event, {
+      isFav: state.favs.has(id),
+      canPrev,
+      canNext,
+    });
+    if (!dom.modal.open) {
+      if (typeof dom.modal.showModal === "function") dom.modal.showModal();
+      else dom.modal.setAttribute("open", "open");
+    }
   }
 
   function closeModal() {
@@ -741,9 +884,22 @@
     btn.setAttribute("aria-pressed", state.favs.has(state.modalEventId) ? "true" : "false");
   }
 
-  function rerender({ keepScroll }) {
+  function navigateModal(direction) {
+    if (!state.modalEventId) return;
+    const events = getVisibleEventsForCurrentPage();
+    if (!events.length) return;
+    const index = events.findIndex((event) => event.id === state.modalEventId);
+    if (index < 0) return;
+    const nextIndex = index + direction;
+    if (nextIndex < 0 || nextIndex >= events.length) return;
+    const target = events[nextIndex];
+    if (!target) return;
+    openModalFor(target.id);
+  }
+
+  async function rerender({ keepScroll }) {
     const scrollY = window.scrollY;
-    renderNextPage({ reset: true });
+    await renderCurrentPage();
     syncCardFavButtons();
     applyFavsOnly();
     if (keepScroll) window.scrollTo({ top: scrollY });
@@ -761,8 +917,22 @@
     else dom.authModal.removeAttribute("open");
   }
 
-  function init() {
-    if (!dom.list || !dom.favsToggle) return;
+  async function init() {
+    if (!dom.list) return;
+
+    const hero = document.querySelector('.bk-hero--gonzo');
+    if (hero) {
+      const onMove = (e) => {
+        const rect = hero.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dx = (e.clientX - cx) / rect.width;
+        const dy = (e.clientY - cy) / rect.height;
+        hero.style.setProperty('--bk-hero-shift-x', `${dx * 40}px`);
+        hero.style.setProperty('--bk-hero-shift-y', `${dy * 24}px`);
+      };
+      window.addEventListener('pointermove', onMove, { passive: true });
+    }
 
     document.addEventListener(
       "error",
@@ -776,17 +946,53 @@
       true
     );
 
+    setStatus("Загружаем карточки из базы...");
+    state.pageCache.clear();
+    state.pageCursorByPage.clear();
+    state.hasMoreByPage.clear();
+    state.pageCursorByPage.set(1, null);
+    await ensurePageLoaded(1);
+
     updateFavsCount();
     applyFavsOnly();
     syncFavsOnlyUrl(state.favsOnly);
-    renderNextPage({ reset: true });
+    await renderCurrentPage();
 
-    dom.favsToggle.addEventListener("click", () => {
-      state.favsOnly = !state.favsOnly;
-      writeBool(LS.favsOnly, state.favsOnly);
-      syncFavsOnlyUrl(state.favsOnly);
-      rerender({ keepScroll: false });
-    });
+    if (dom.favsToggle) {
+      dom.favsToggle.addEventListener("click", async () => {
+        state.favsOnly = !state.favsOnly;
+        writeBool(LS.favsOnly, state.favsOnly);
+        syncFavsOnlyUrl(state.favsOnly);
+        state.currentPage = 1;
+        await rerender({ keepScroll: false });
+      });
+    }
+
+    if (dom.pagination) {
+      dom.pagination.addEventListener("click", async (event) => {
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+
+        const navBtn = target.closest("[data-page-action]");
+        if (!navBtn) return;
+        const action = navBtn.getAttribute("data-page-action");
+        if (action === "prev" && state.currentPage > 1) {
+          state.currentPage -= 1;
+          await rerender({ keepScroll: false });
+        }
+        if (action === "next") {
+          const nextPage = state.currentPage + 1;
+          const canMove =
+            state.pageCache.has(nextPage) ||
+            state.hasMoreByPage.get(state.currentPage) === true;
+          if (!canMove) return;
+          const loaded = await ensurePageLoaded(nextPage);
+          if (!loaded) return;
+          state.currentPage = nextPage;
+          await rerender({ keepScroll: false });
+        }
+      });
+    }
 
     if (dom.profileToggle) {
       dom.profileToggle.addEventListener("click", openAuthModal);
@@ -814,7 +1020,7 @@
         toggleFav(id);
         syncCardFavButtons();
         syncModalFavButton();
-        if (state.favsOnly && !state.favs.has(id)) rerender({ keepScroll: true });
+        if (state.favsOnly && !state.favs.has(id)) void rerender({ keepScroll: true });
         return;
       }
 
@@ -827,6 +1033,18 @@
       if (action === "link") {
         return;
       }
+    });
+
+    dom.list.addEventListener("keydown", (e) => {
+      const target = e.target;
+      if (!(target instanceof Element)) return;
+      const card = target.closest(".bk-card[data-id]");
+      if (!card) return;
+      if (e.key !== "Enter" && e.key !== " ") return;
+      e.preventDefault();
+      const id = card.getAttribute("data-id");
+      if (!id) return;
+      openModalFor(id);
     });
 
     if (dom.modal) {
@@ -842,6 +1060,16 @@
       dom.modalBody.addEventListener("click", (e) => {
         const target = e.target;
         if (!(target instanceof Element)) return;
+        const prevBtn = target.closest('button[data-action="modal-prev"]');
+        if (prevBtn) {
+          navigateModal(-1);
+          return;
+        }
+        const nextBtn = target.closest('button[data-action="modal-next"]');
+        if (nextBtn) {
+          navigateModal(1);
+          return;
+        }
         const btn = target.closest('button[data-action="fav"]');
         if (!btn || !state.modalEventId) return;
         toggleFav(state.modalEventId);
@@ -849,21 +1077,26 @@
         syncCardFavButtons();
         if (state.favsOnly && !state.favs.has(state.modalEventId)) {
           closeModal();
-          rerender({ keepScroll: true });
+          void rerender({ keepScroll: true });
         }
       });
     }
 
+    document.addEventListener("keydown", (e) => {
+      if (!state.modalEventId || !dom.modal || !dom.modal.open) return;
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        navigateModal(-1);
+      }
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        navigateModal(1);
+      }
+    });
+
     const onScroll = () => {
       const y = window.scrollY || 0;
       if (dom.toTop) dom.toTop.classList.toggle("bk-top--show", y > 900);
-
-      const nearBottom =
-        window.innerHeight + y >= document.documentElement.scrollHeight - 900;
-      const source = getSourceEvents();
-      if (nearBottom && state.rendered < source.length) {
-        renderNextPage({ reset: false });
-      }
     };
     window.addEventListener("scroll", onScroll, { passive: true });
 
@@ -872,11 +1105,19 @@
         window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" })
       );
     }
+
+    if (dom.filtersButton) {
+      dom.filtersButton.addEventListener("click", () => {
+        setStatus("Фильтры скоро появятся.");
+      });
+    }
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener("DOMContentLoaded", () => {
+      void init();
+    });
   } else {
-    init();
+    void init();
   }
 })();
