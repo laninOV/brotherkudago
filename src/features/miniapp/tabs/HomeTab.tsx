@@ -135,11 +135,7 @@ export function HomeTab() {
         </div>
       </div>
 
-      {loading && (
-        <div className="screen__subtitle" style={{ padding: '0 16px 8px' }}>
-          Обновляем карточки событий…
-        </div>
-      )}
+      {loading && <div className="screen__notice">Обновляем карточки событий…</div>}
 
       <div className="filtersToggleRow">
         <button
@@ -170,7 +166,7 @@ export function HomeTab() {
             ))}
           </div>
 
-          <div className="filtersPanel__title" style={{ marginTop: 12 }}>
+          <div className="filtersPanel__title filtersPanel__title--offset">
             Быстрые фильтры
           </div>
           <div className="filterWrap" aria-label="Фильтры">
@@ -190,14 +186,14 @@ export function HomeTab() {
 
       <div className="cardStack" aria-live="polite">
         {stack.length === 0 ? (
-          <div className="placeCard placeCard--static" style={{ position: 'relative' }}>
+          <div className="placeCard placeCard--static">
             <div className="placeCard__glass" />
             <div className="placeCard__content">
               <div className="placeCard__title">Новых мест пока нет</div>
-              <p style={{ marginTop: 8, color: 'var(--muted)' }}>
-                Возможно, ты уже просмотрела все подборки. Попробуй расширить фильтры или
-                подождать, пока появятся новые лайки от других.
-              </p>
+                <p className="placeCard__hint">
+                  Возможно, ты уже просмотрела все подборки. Попробуй расширить фильтры или
+                  подождать, пока появятся новые лайки от других.
+                </p>
             </div>
           </div>
         ) : (
@@ -223,11 +219,13 @@ export function HomeTab() {
                 aria-label={place.title}
                 onClick={() => isActive && setSelected(place)}
               >
-                {place.image && (
+                {place.image ? (
                   <div
                     className="placeCard__bg"
                     style={{ backgroundImage: `url(${place.image})` }}
                   />
+                ) : (
+                  <div className="placeCard__bg placeCard__bg--placeholder" />
                 )}
                 <div className="placeCard__glass" />
                 <button
@@ -252,8 +250,8 @@ export function HomeTab() {
                     {place.price && <span className="badge">{place.price}</span>}
                     {place.durationMin && <span className="badge">{place.durationMin} мин</span>}
                   </div>
-                  <p style={{ marginTop: 12, color: 'var(--on-media-muted)' }}>{place.description}</p>
-                  <div className="placeCard__meta" style={{ marginTop: 10 }}>
+                  <p className="placeCard__description">{place.description}</p>
+                  <div className="placeCard__meta placeCard__meta--tags">
                     {place.tags.slice(0, 3).map((tag) => (
                       <span key={tag} className="badge">
                         {tag}

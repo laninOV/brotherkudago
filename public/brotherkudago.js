@@ -498,57 +498,30 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
     return hash;
   }
 
-  function truncate(text, max) {
-    const value = String(text || "").trim();
-    if (value.length <= max) return value;
-    return `${value.slice(0, max - 1)}…`;
-  }
-
-  function eventToCardHtml(event, { isFav, isHighPriority }) {
-    const starts = parseDate(event.startsAt);
-    const startTime = starts ? formatTime(starts) : "";
-    const dayTitle = starts ? humanDayTitle(starts) : "Дата не указана";
-    const dayDelta = starts ? daysFromNow(starts) : null;
-    const hot = typeof dayDelta === "number" && dayDelta >= 0 && dayDelta <= 1;
-
-    const tags = Array.isArray(event.tags) ? event.tags.slice(0, 3) : [];
-    const hotTag = hot ? `<span class="bk-tag bk-tag--hot">скоро</span>` : "";
-    const tagHtml = [hotTag, ...tags.map((t) => `<span class="bk-tag">${escapeHtml(t)}</span>`)]
-      .filter(Boolean)
-      .join("");
-
-    const imageSrc = event.image || FALLBACK_IMAGE;
+  function eventToCardHtml(event, { isHighPriority }) {
+    const hasImage = Boolean(event.image);
+    const imageSrc = hasImage ? event.image : FALLBACK_IMAGE;
+    const previewDesc = event.description || event.venue || event.city || "";
     const loading = isHighPriority ? "eager" : "lazy";
     const fetchPriority = isHighPriority ? ' fetchpriority="high"' : "";
-    const imageHtml = `<img src="${escapeHtml(
-      imageSrc
-    )}" alt="" width="1200" height="900" loading="${loading}" decoding="async"${fetchPriority} data-fallback="${escapeHtml(
-      FALLBACK_IMAGE
-    )}">`;
-
-    const description = truncate(event.description || "", 140);
+    const imageHtml = hasImage
+      ? `<img src="${escapeHtml(
+          imageSrc
+        )}" alt="" width="1200" height="900" loading="${loading}" decoding="async"${fetchPriority} data-fallback="${escapeHtml(
+          FALLBACK_IMAGE
+        )}">`
+      : `<div class="bk-card__placeholder" aria-hidden="true">ОКОЛО</div>`;
 
     return `
-      <article class="bk-card" data-id="${escapeHtml(event.id)}" data-action="open" role="button" tabindex="0" aria-label="${escapeHtml(
-      event.title
-    )}">
+      <article class="bk-card ${hasImage ? "" : "bk-card--placeholder"}" data-id="${escapeHtml(event.id)}" data-action="open" role="button" tabindex="0" aria-label="${escapeHtml(
+        event.title
+      )}">
         <div class="bk-card__media">
           ${imageHtml}
-          <button class="bk-card__fav" type="button" aria-label="В избранное" aria-pressed="${
-            isFav ? "true" : "false"
-          }" data-action="fav">❤</button>
         </div>
         <div class="bk-card__body">
           <h3 class="bk-card__title">${escapeHtml(event.title)}</h3>
-          <div class="bk-card__meta">
-            <div class="bk-meta">
-              <span class="bk-meta__item">📅 ${escapeHtml(dayTitle)}</span>
-              <span class="bk-meta__item">🕒 ${escapeHtml(startTime || "—")}</span>
-              <span class="bk-meta__item">🎟️ ${escapeHtml(formatPrice(event.price))}</span>
-            </div>
-          </div>
-          <p class="bk-card__desc">${escapeHtml(description || "Описание скоро появится.")}</p>
-          <div class="bk-tags">${tagHtml}</div>
+          <p class="bk-card__desc">${escapeHtml(previewDesc)}</p>
         </div>
       </article>
     `;
@@ -564,12 +537,15 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
       : "Дата не указана";
 
     const tags = Array.isArray(event.tags) ? event.tags : [];
-    const imageSrc = event.image || FALLBACK_IMAGE;
-    const imageHtml = `<img src="${escapeHtml(
-      imageSrc
-    )}" alt="" width="1200" height="900" loading="lazy" decoding="async" data-fallback="${escapeHtml(
-      FALLBACK_IMAGE
-    )}">`;
+    const hasImage = Boolean(event.image);
+    const imageSrc = hasImage ? event.image : FALLBACK_IMAGE;
+    const imageHtml = hasImage
+      ? `<img src="${escapeHtml(
+          imageSrc
+        )}" alt="" width="1200" height="900" loading="lazy" decoding="async" data-fallback="${escapeHtml(
+          FALLBACK_IMAGE
+        )}">`
+      : `<div class="bk-card__placeholder" aria-hidden="true">ОКОЛО</div>`;
 
     const address = event.address ? ` · ${escapeHtml(event.address)}` : "";
 
@@ -666,8 +642,12 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
   const dom = {
     list: document.getElementById("bk-list"),
     status: document.getElementById("bk-status"),
+    feedPieces: document.getElementById("bk-feed-pieces"),
     pagination: document.getElementById("bk-pagination"),
     filtersButton: document.getElementById("bk-filters-button"),
+    filterDrawer: document.getElementById("bk-filter-drawer"),
+    filterOpenButtons: document.querySelectorAll("[data-filter-open]"),
+    filterCloseButtons: document.querySelectorAll("[data-filter-close]"),
     favsToggle: document.getElementById("bk-favs-toggle"),
     favsCount: document.getElementById("bk-favs-count"),
     profileToggle: document.getElementById("bk-profile-open"),
@@ -700,6 +680,12 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
   function setStatus(text) {
     if (!dom.status) return;
     dom.status.textContent = text;
+  }
+
+  function setFeedPiecesCount(count) {
+    if (!dom.feedPieces) return;
+    const safeCount = Number.isFinite(count) && count > 0 ? count : 0;
+    dom.feedPieces.textContent = `${safeCount} позиций`;
   }
 
   function updateFavsCount() {
@@ -808,6 +794,7 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
     if (state.favsOnly) {
       slice = slice.filter((event) => state.favs.has(event.id));
     }
+    setFeedPiecesCount(slice.length);
 
     if (slice.length === 0) {
       setStatus(
@@ -822,9 +809,7 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
     const htmlParts = [];
     for (const [index, event] of slice.entries()) {
       const isHighPriority = state.currentPage === 1 && index < 2;
-      htmlParts.push(
-        eventToCardHtml(event, { isFav: state.favs.has(event.id), isHighPriority })
-      );
+      htmlParts.push(eventToCardHtml(event, { isHighPriority }));
     }
 
     dom.list.insertAdjacentHTML("beforeend", htmlParts.join(""));
@@ -917,22 +902,22 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
     else dom.authModal.removeAttribute("open");
   }
 
+  function openFilterDrawer() {
+    if (!dom.filterDrawer) return;
+    dom.filterDrawer.classList.add("is-open");
+    dom.filterDrawer.setAttribute("aria-hidden", "false");
+    if (dom.filtersButton) dom.filtersButton.setAttribute("aria-expanded", "true");
+  }
+
+  function closeFilterDrawer() {
+    if (!dom.filterDrawer) return;
+    dom.filterDrawer.classList.remove("is-open");
+    dom.filterDrawer.setAttribute("aria-hidden", "true");
+    if (dom.filtersButton) dom.filtersButton.setAttribute("aria-expanded", "false");
+  }
+
   async function init() {
     if (!dom.list) return;
-
-    const hero = document.querySelector('.bk-hero--gonzo');
-    if (hero) {
-      const onMove = (e) => {
-        const rect = hero.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-        const dx = (e.clientX - cx) / rect.width;
-        const dy = (e.clientY - cy) / rect.height;
-        hero.style.setProperty('--bk-hero-shift-x', `${dx * 40}px`);
-        hero.style.setProperty('--bk-hero-shift-y', `${dy * 24}px`);
-      };
-      window.addEventListener('pointermove', onMove, { passive: true });
-    }
 
     document.addEventListener(
       "error",
@@ -1002,6 +987,21 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
       dom.authClose.addEventListener("click", (event) => {
         event.preventDefault();
         closeAuthModal();
+      });
+    }
+
+    for (const openBtn of dom.filterOpenButtons) {
+      openBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        openFilterDrawer();
+        setStatus("Фильтры добавим в следующем функциональном цикле.");
+      });
+    }
+
+    for (const closeBtn of dom.filterCloseButtons) {
+      closeBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        closeFilterDrawer();
       });
     }
 
@@ -1083,6 +1083,11 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
     }
 
     document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && dom.filterDrawer?.classList.contains("is-open")) {
+        e.preventDefault();
+        closeFilterDrawer();
+        return;
+      }
       if (!state.modalEventId || !dom.modal || !dom.modal.open) return;
       if (e.key === "ArrowLeft") {
         e.preventDefault();
@@ -1104,12 +1109,6 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
       dom.toTop.addEventListener("click", () =>
         window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" })
       );
-    }
-
-    if (dom.filtersButton) {
-      dom.filtersButton.addEventListener("click", () => {
-        setStatus("Фильтры скоро появятся.");
-      });
     }
   }
 

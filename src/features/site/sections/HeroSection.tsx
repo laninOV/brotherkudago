@@ -1,65 +1,53 @@
+import { MARQUEE_WORDS } from "@/features/site/constants/marquee";
+
 export function HeroSection() {
   return (
-    <section className="bk-hero bk-hero--gonzo" aria-label="Главный экран">
+    <section className="bk-hero" aria-label="Главный экран">
       <div className="bk-hero__inner">
-        <div className="bk-hero__copy bk-hero__copy--stacked">
-          <h1 className="bk-hero__title">Время не ждёт!</h1>
+        <div className="bk-hero__rail" aria-hidden="true">
+          <span>ОКОЛО В ГОРОДЕ</span>
+          <span>СОБЫТИЯ И ЛЮДИ</span>
         </div>
-        <div className="bk-hero__art bk-hero__art--center" aria-hidden="true">
+
+        <div className="bk-hero__panel">
+          <p className="bk-hero__eyebrow">ГОРОДСКОЙ МИКС / НЕДЕЛЬНЫЙ ДРОП</p>
+          <h1 className="bk-hero__title">
+            <span className="bk-hero__title-main">Старое</span>
+            <span className="bk-hero__title-sub">это новое</span>
+            <span className="bk-hero__title-sub">новое</span>
+          </h1>
+          <p className="bk-hero__lead">
+            Добрая афиша города: находи места, где легко познакомиться и провести вечер вместе.
+          </p>
+        </div>
+        <div className="bk-hero__media">
           <img
-            className="bk-hero__sun"
-            src="/sun.png"
-            alt=""
-            width={1120}
-            height={928}
+            className="bk-hero__photo"
+            src="/iloveeventfest_files/peter-van-rooijen-band-s800x600.jpg"
+            alt="Люди на музыкальном событии"
+            width={800}
+            height={600}
             loading="eager"
             decoding="async"
             fetchPriority="high"
           />
-          <img
-            className="bk-hero__flower"
-            src="/flower-glasses.png"
-            alt=""
-            width={1152}
-            height={896}
-            loading="eager"
-            decoding="async"
-            fetchPriority="high"
-          />
-          <img className="bk-hero__bee" src="/bee.png" alt="" width={88} height={88} loading="lazy" decoding="async" />
-          <span className="bk-hero__cta-secondary">Открой что-то новое!</span>
+        </div>
+
+        <p className="bk-hero__overlay" aria-hidden="true">
+          ИГРА НА ПАУЗЕ
+        </p>
+
+        <a className="bk-hero__cta" href="#events">
+          СМОТРЕТЬ АФИШУ →
+        </a>
+      </div>
+
+      <div className="bk-feed__ticker bk-hero__ticker" aria-label="Декоративная строка">
+        <div className="bk-feed__ticker-track" aria-hidden="true">
+          <span>{MARQUEE_WORDS}</span>
+          <span>{MARQUEE_WORDS}</span>
         </div>
       </div>
-      <a className="bk-scrollhint" href="#events" aria-label="Прокрутить вниз к ленте">
-        <span className="bk-scrollhint__text">листай вниз</span>
-        <svg className="bk-scrollhint__arrow" viewBox="0 0 64 64" aria-hidden="true">
-          <path
-            d="M14 26c8 10 18 18 18 18s10-8 18-18"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path d="M32 18v26" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
-        </svg>
-      </a>
-      <section className="bk-marquee" aria-label="Лента слоганов">
-        <div className="bk-marquee__track" aria-hidden="true">
-          <span>
-            КАФЕ • МУЗЕИ • ВЕЧЕРИНКИ • ЛЮДИ • СВИДАНИЯ • ВЫСТАВКИ • КВЕСТЫ • ОБЩЕНИЕ • КИНО • ПРОГУЛКИ • РЕСТОРАНЫ • ЛЕКЦИИ •
-            ТЕАТРЫ • БАРЫ • СОБЫТИЯ • КОНЦЕРТЫ • ВСТРЕЧИ • МАСТЕР-КЛАССЫ • ХОББИ • ПУТЕШЕСТВИЯ • ФЕСТИВАЛИ • ИГРЫ • ТАНЦЫ •
-            СПОРТ • ОТДЫХ • ИСКУССТВО • НАУКА • КНИГИ • ФОТО • ШОУ • ТРЕНИНГИ • ТРЕНИРОВКИ • БИБЛИОТЕКИ • МЕРОПРИЯТИЯ •
-            ЗНАКОМСТВА • ПРАЗДНИКИ • КУЛИНАРИЯ • ПРОГУЛКИ •
-          </span>
-          <span aria-hidden="true">
-            КАФЕ • МУЗЕИ • ВЕЧЕРИНКИ • ЛЮДИ • СВИДАНИЯ • ВЫСТАВКИ • КВЕСТЫ • ОБЩЕНИЕ • КИНО • ПРОГУЛКИ • РЕСТОРАНЫ • ЛЕКЦИИ •
-            ТЕАТРЫ • БАРЫ • СОБЫТИЯ • КОНЦЕРТЫ • ВСТРЕЧИ • МАСТЕР-КЛАССЫ • ХОББИ • ПУТЕШЕСТВИЯ • ФЕСТИВАЛИ • ИГРЫ • ТАНЦЫ •
-            СПОРТ • ОТДЫХ • ИСКУССТВО • НАУКА • КНИГИ • ФОТО • ШОУ • ТРЕНИНГИ • ТРЕНИРОВКИ • БИБЛИОТЕКИ • МЕРОПРИЯТИЯ •
-            ЗНАКОМСТВА • ПРАЗДНИКИ • КУЛИНАРИЯ • ПРОГУЛКИ •
-          </span>
-        </div>
-      </section>
     </section>
   );
 }

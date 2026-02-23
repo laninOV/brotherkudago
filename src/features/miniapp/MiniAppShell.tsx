@@ -38,7 +38,7 @@ function MiniApp() {
   }, []);
 
   return (
-    <div className="app miniapp-root">
+    <div className="app miniapp-root ma-root">
       <div className="app__content">{content}</div>
       <TabBar value={tab} onChange={setTab} />
     </div>

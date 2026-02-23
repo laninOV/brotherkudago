@@ -30,6 +30,10 @@ type EventsCursor = {
 let poolSingleton: Pool | null = null;
 let initPromise: Promise<void> | null = null;
 
+function hasDatabaseUrl() {
+  return Boolean(process.env.DATABASE_URL?.trim());
+}
+
 function getDatabaseUrl() {
   const url = process.env.DATABASE_URL;
   if (!url) {
@@ -254,6 +258,81 @@ function decodeCursor(raw: string): EventsCursor | null {
   }
 }
 
+function getMoscowDateKey(value: string) {
+  return new Date(value).toLocaleDateString("en-CA", { timeZone: "Europe/Moscow" });
+}
+
+function distanceKm(lat1: number, lng1: number, lat2: number, lng2: number) {
+  const toRad = (v: number) => (v * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return 2 * 6371 * Math.asin(Math.sqrt(a));
+}
+
+function compareEventPosition(event: EventRecord, cursor: EventsCursor) {
+  const leftTime = new Date(event.startsAt).getTime();
+  const rightTime = new Date(cursor.startsAt).getTime();
+  if (leftTime === rightTime) return event.id.localeCompare(cursor.id);
+  return leftTime - rightTime;
+}
+
+function getEventsPageFromSeed(options: GetEventsPageOptions): EventsPage {
+  const normalizedLimit = Math.min(Math.max(options.limit ?? 12, 1), 200);
+  const cursor = options.cursor ? decodeCursor(options.cursor) : null;
+  const now = Date.now();
+  const nowMoscowDateKey = getMoscowDateKey(new Date(now).toISOString());
+
+  const filtered = seedEvents()
+    .slice()
+    .sort((a, b) => {
+      const timeDelta = new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime();
+      return timeDelta === 0 ? a.id.localeCompare(b.id) : timeDelta;
+    })
+    .filter((event) => {
+      if (cursor && compareEventPosition(event, cursor) <= 0) return false;
+      if (options.category && event.category !== options.category) return false;
+      if (typeof options.priceMax === "number" && Number.isFinite(options.priceMax)) {
+        const minPrice = event.price?.min;
+        if (typeof minPrice === "number" && minPrice > options.priceMax) return false;
+      }
+      if (
+        typeof options.nearLat === "number" &&
+        Number.isFinite(options.nearLat) &&
+        typeof options.nearLng === "number" &&
+        Number.isFinite(options.nearLng)
+      ) {
+        const distance = distanceKm(options.nearLat, options.nearLng, event.lat, event.lng);
+        const radius = options.radiusKm ?? 4.5;
+        if (distance > radius) return false;
+      }
+      if (options.datePreset === "today") {
+        return getMoscowDateKey(event.startsAt) === nowMoscowDateKey;
+      }
+      if (options.datePreset === "week") {
+        const eventTime = new Date(event.startsAt).getTime();
+        return eventTime >= now && eventTime < now + 7 * 24 * 60 * 60 * 1000;
+      }
+      return true;
+    });
+
+  const hasMore = filtered.length > normalizedLimit;
+  const pageEvents = hasMore ? filtered.slice(0, normalizedLimit) : filtered;
+  const last = pageEvents.at(-1);
+  const nextCursor = hasMore && last ? encodeCursor({ startsAt: last.startsAt, id: last.id }) : null;
+
+  return {
+    events: pageEvents,
+    pageInfo: {
+      limit: normalizedLimit,
+      hasMore,
+      nextCursor,
+    },
+  };
+}
+
 async function initDb() {
   if (initPromise) return initPromise;
 
@@ -352,6 +431,10 @@ export async function getEventsFromDb(): Promise<EventRecord[]> {
 }
 
 export async function getEventsPageFromDb(options: GetEventsPageOptions): Promise<EventsPage> {
+  if (!hasDatabaseUrl()) {
+    return getEventsPageFromSeed(options);
+  }
+
   await initDb();
   const pool = getPool();
 

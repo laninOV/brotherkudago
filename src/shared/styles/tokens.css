@@ -1,16 +1,47 @@
 :root {
-  --retro-paper: #f6efe3;
-  --retro-ink: #2b2a29;
-  --retro-orange: #e24b2b;
-  --retro-mustard: #f2c14e;
-  --retro-olive: #7ea05a;
-  --retro-blue: #2a82b6;
+  --site-ui: var(--site-ui-font), "Nunito", "Segoe UI", "Trebuchet MS", sans-serif;
+  --site-display: var(--site-display-font), "Yeseva One", "Times New Roman", serif;
+  --site-pixel: var(--site-pixel-font), "Courier New", monospace;
 
-  --retro-shadow-sm: 0 8px 20px rgba(43, 42, 41, 0.12);
-  --retro-shadow-md: 0 16px 30px rgba(43, 42, 41, 0.16);
-  --retro-shadow-lg: 0 24px 44px rgba(43, 42, 41, 0.2);
+  --retro-ui-font: var(--site-ui);
+  --retro-body-font: var(--site-ui);
+  --retro-display-font: var(--site-display);
+  --retro-title-font: var(--site-display);
+
+  --retro-paper: #ffffff;
+  --retro-paper-2: #ffffff;
+  --retro-ink: #121212;
+  --retro-ink-soft: #303030;
+  --retro-orange: #ecd06f;
+  --retro-orange-strong: #d7bd63;
+  --retro-mustard: #ecd06f;
+  --retro-olive: #84cf9a;
+  --retro-blue: #0ea4c2;
+  --retro-cream: #ffffff;
+  --retro-coral: #ef6f4b;
+
+  --retro-radius-sm: 8px;
+  --retro-radius-md: 12px;
+  --retro-radius-lg: 16px;
+  --retro-radius-xl: 20px;
+
+  --retro-shadow-sm: 0 8px 18px rgba(18, 18, 18, 0.1);
+  --retro-shadow-md: 0 12px 24px rgba(18, 18, 18, 0.14);
+  --retro-shadow-lg: 0 18px 28px rgba(18, 18, 18, 0.18);
+  --retro-shadow-lift: 0 8px 14px rgba(18, 18, 18, 0.14);
+  --retro-shadow-lift-lg: 0 12px 18px rgba(18, 18, 18, 0.16);
 
   --retro-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --retro-ease-soft: cubic-bezier(0.16, 0.84, 0.44, 1);
-  --retro-speed-marquee: 320s;
+  --retro-ease-snap: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  --retro-duration-fast: 150ms;
+  --retro-duration-base: 250ms;
+  --retro-duration-slow: 420ms;
+  --retro-speed-marquee: 160s;
+
+  --retro-grain-opacity: 0;
+  --retro-scan-opacity: 0;
+  --retro-scan-accent-opacity: 0;
+  --retro-glitch-shift: 1px;
 }

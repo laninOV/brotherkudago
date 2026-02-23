@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import type { CSSProperties } from 'react'
 import { MATCH_PROFILES } from '../data/matchProfiles'
 import { useAppState } from '../state/AppState'
 import { usePlacesState } from '../state/PlacesState'
@@ -95,20 +96,16 @@ export function MatchesTab() {
                 }) => (
                 <div key={profile.id} className="listItem">
                   <div
-                    className="thumb"
-                    style={{
-                      backgroundImage: `url(${profile.photo})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                    }}
+                    className="thumb thumb--photo"
+                    style={{ ['--thumb-image' as never]: `url(${profile.photo})` } as CSSProperties}
                   />
-                  <div style={{ minWidth: 0 }}>
+                  <div className="listItem__main">
                     <div className="listItem__title">{profile.name}</div>
                     <div className="listItem__sub">{profile.summary}</div>
                     <div className="matchScoreBar">
                       <div className="matchScoreBar__fill" style={{ width: `${score}%` }} />
                     </div>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
+                    <div className="listItem__badges">
                       <span className="badge">{score}% совпадение</span>
                       <span className="badge">
                         {sharedPlaceNames.length > 0
@@ -165,14 +162,14 @@ export function MatchesTab() {
               {savedItems.map((place) => (
                 <div key={place.id} className="listItem">
                   <div
-                    className="thumb"
-                    style={{
-                      backgroundImage: place.image ? `url(${place.image})` : undefined,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                    }}
+                    className="thumb thumb--photo"
+                    style={
+                      {
+                        ['--thumb-image' as never]: place.image ? `url(${place.image})` : 'none',
+                      } as CSSProperties
+                    }
                   />
-                  <div style={{ minWidth: 0 }}>
+                  <div className="listItem__main">
                     <div className="listItem__title">{place.title}</div>
                     <div className="listItem__sub">{place.address}</div>
                   </div>

@@ -18,6 +18,7 @@ const CATEGORY_TYPE_LABELS: Record<CategorySection['categoryType'], string> = {
   dealbreakers: 'Что не подходит',
   facts: 'Факты',
 }
+
 const SLIDER_STEP = 100 / 6
 
 const toIntValue = (value: number) => Math.round((value - 50) / SLIDER_STEP)
@@ -42,16 +43,18 @@ export function ProfileTab() {
   const { places } = usePlacesState()
   const { history, profileInfo, setProfileInfo } = useAppState()
   const safeProfileInfo = profileInfo ?? DEFAULT_PROFILE_INFO
+
   const [editingProfile, setEditingProfile] = useState(false)
   const [testCompleted, setTestCompleted] = useState(false)
   const [surveyActive, setSurveyActive] = useState(false)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
 
-  const placeById = useMemo(() => new Map(places.map((p) => [p.id, p])), [places])
+  const placeById = useMemo(() => new Map(places.map((place) => [place.id, place])), [places])
   const historyView = useMemo(
-    () => history.slice(0, 20).map((h) => ({ h, place: placeById.get(h.placeId) })),
+    () => history.slice(0, 20).map((entry) => ({ entry, place: placeById.get(entry.placeId) })),
     [history, placeById],
   )
+
   const likeSummary = useMemo(() => {
     const liked = history.filter((event) => event.action === 'like')
     return {
@@ -59,13 +62,14 @@ export function ProfileTab() {
       lastPlaceId: liked[0]?.placeId,
     }
   }, [history])
+
   const lastLikedName = likeSummary.lastPlaceId ? placeById.get(likeSummary.lastPlaceId)?.title : undefined
 
   const toggleMood = (trait: MoodTrait) => {
     const hasTrait = safeProfileInfo.moodTraits.includes(trait)
     setProfileInfo({
       moodTraits: hasTrait
-        ? safeProfileInfo.moodTraits.filter((t) => t !== trait)
+        ? safeProfileInfo.moodTraits.filter((item) => item !== trait)
         : [...safeProfileInfo.moodTraits, trait],
     })
   }
@@ -74,7 +78,7 @@ export function ProfileTab() {
     const hasHobby = safeProfileInfo.hobbies.includes(hobby)
     setProfileInfo({
       hobbies: hasHobby
-        ? safeProfileInfo.hobbies.filter((h) => h !== hobby)
+        ? safeProfileInfo.hobbies.filter((item) => item !== hobby)
         : [...safeProfileInfo.hobbies, hobby],
     })
   }
@@ -82,6 +86,7 @@ export function ProfileTab() {
   const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) return
+
     const reader = new FileReader()
     reader.onload = () => {
       if (typeof reader.result === 'string') {
@@ -95,12 +100,17 @@ export function ProfileTab() {
   const handleGalleryChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
     if (!files) return
+
     const existing = safeProfileInfo.galleryPhotos ?? []
     const available = 5 - existing.length
     if (available <= 0) return
+
     const toAdd = Array.from(files).slice(0, available)
     const loaded = await Promise.all(toAdd.map((file) => readFileAsDataURL(file)))
-    setProfileInfo({ galleryPhotos: [...existing, ...loaded.filter(Boolean)] })
+
+    setProfileInfo({
+      galleryPhotos: [...existing, ...loaded.filter(Boolean)],
+    })
     event.target.value = ''
   }
 
@@ -133,7 +143,11 @@ export function ProfileTab() {
     const current = Array.isArray(safeProfileInfo.categoryAnswers[id])
       ? (safeProfileInfo.categoryAnswers[id] as string[])
       : []
-    const next = current.includes(option) ? current.filter((value) => value !== option) : [...current, option]
+
+    const next = current.includes(option)
+      ? current.filter((value) => value !== option)
+      : [...current, option]
+
     setProfileInfo({
       categoryAnswers: {
         ...safeProfileInfo.categoryAnswers,
@@ -181,69 +195,63 @@ export function ProfileTab() {
   const currentValue = safeProfileInfo.surveyResponses[currentQuestion.id] ?? 50
 
   return (
-    <div className="flex h-full min-h-0 flex-col">
-      <div className="flex items-center justify-between gap-4 px-5 pb-3 pt-5">
+    <div className="screen">
+      <div className="screen__header">
         <div>
-          <div className="text-[20px] font-semibold tracking-tight">Профиль</div>
-          <div className="mt-1 text-[13px] text-[var(--muted)]">
-            Настрой и дополни профиль — это повлияет на то, как тебя поймут
+          <div className="screen__title">Профиль</div>
+          <div className="screen__subtitle">
+            Настрой и дополни профиль — это повлияет на то, как тебя поймут.
           </div>
         </div>
         <button
           type="button"
-          className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-[13px] font-semibold transition active:scale-[0.98] ${
-            editingProfile
-              ? 'bg-[#0d2b1d] text-[#E3EFD3] shadow-[0_10px_24px_rgba(13,43,29,0.45)]'
-              : 'border border-[#E3EFD3]/20 bg-[#345635]/60 text-[var(--text)]'
-          }`}
+          className={`iosButton iosButton--small ${editingProfile ? 'iosButton--inverse' : 'iosButton--ghost'}`}
           onClick={() => setEditingProfile((prev) => !prev)}
         >
           {editingProfile ? 'Готово' : 'Редактировать'}
         </button>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-auto px-5 pb-[calc(var(--tabbar-offset)+20px)] overscroll-contain">
-        <div className="flex flex-col gap-5 pb-4">
-          <section className="rounded-[28px] border border-[#E3EFD3]/20 bg-[var(--panel)] p-5 shadow-[var(--card-shadow)] backdrop-blur-2xl">
-            <div className="flex flex-col gap-1">
-              <div className="text-[20px] font-semibold">Профиль</div>
-              <p className="text-[13px] text-[var(--muted)]">
-                Загрузите фото, добавьте статус и опишите, с кем вы хотите ходить в уютные места.
-              </p>
+      <div className="screen__body">
+        <div className="profileFlow">
+          <section className="iosCard">
+            <div className="profileCard__header">
+              <div>
+                <div className="profileCard__title">Основная анкета</div>
+                <p className="profileCard__subtitle">
+                  Фото, описание и статус помогают быстрее подобрать подходящую компанию.
+                </p>
+              </div>
             </div>
 
-            <div className="mt-4 flex flex-col gap-4">
-              <div className="flex flex-wrap items-start gap-4">
-                <div className="flex min-w-[120px] flex-col gap-2">
+            <div className="profileCard__body">
+              <div className="photoRow">
+                <div className="photoRow__avatar">
                   <div
-                    className="flex h-[120px] w-[120px] items-center justify-center rounded-[24px] bg-[#345635]/60 text-[12px] text-[var(--muted)] shadow-[inset_0_1px_0_rgba(227,239,211,0.25)]"
+                    className="photoRow__preview"
                     style={{
                       backgroundImage: safeProfileInfo.photo ? `url(${safeProfileInfo.photo})` : undefined,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
                     }}
                   >
-                    {!safeProfileInfo.photo && 'Твоё фото'}
+                    {!safeProfileInfo.photo ? 'Твоё фото' : ''}
                   </div>
+
                   {editingProfile && (
-                    <div className="flex flex-wrap gap-2">
-                      <label
-                        htmlFor="profile-photo"
-                        className="inline-flex cursor-pointer items-center justify-center rounded-full border border-[#E3EFD3]/20 bg-[#345635]/60 px-3 py-1.5 text-[12px] font-semibold text-[var(--text)]"
-                      >
+                    <div className="photoRow__actions">
+                      <label htmlFor="profile-photo" className="iosButton iosButton--tiny iosButton--ghost">
                         {safeProfileInfo.photo ? 'Заменить' : 'Добавить'}
                       </label>
                       <input
                         id="profile-photo"
+                        className="photoRow__input"
                         type="file"
                         accept="image/*"
-                        className="hidden"
                         onChange={handlePhotoChange}
                       />
                       {safeProfileInfo.photo && (
                         <button
                           type="button"
-                          className="inline-flex items-center justify-center rounded-full border border-[#E3EFD3]/20 bg-[#345635]/60 px-2.5 py-1 text-[11px] font-semibold text-[var(--text)]"
+                          className="iosButton iosButton--tiny iosButton--ghost"
                           onClick={() => setProfileInfo({ photo: undefined })}
                         >
                           Удалить
@@ -252,18 +260,16 @@ export function ProfileTab() {
                     </div>
                   )}
                 </div>
-                <div className="grid flex-1 grid-cols-[repeat(auto-fill,minmax(70px,1fr))] gap-2">
+
+                <div className="photoRow__gallery">
                   {safeProfileInfo.galleryPhotos.map((src, index) => (
-                    <div
-                      key={`${src}-${index}`}
-                      className="relative h-[70px] w-[70px] overflow-hidden rounded-[14px] border border-[#E3EFD3]/20 bg-[#345635]/70 shadow-[inset_0_1px_0_rgba(227,239,211,0.25)]"
-                    >
-                      <img src={src} alt={`Фото ${index + 1}`} className="h-full w-full object-cover" />
+                    <div key={`${src}-${index}`} className="photoGallery__item">
+                      <img src={src} alt={`Фото ${index + 1}`} />
                       {editingProfile && (
                         <button
                           type="button"
+                          className="photoGallery__remove"
                           aria-label="Удалить фото"
-                          className="absolute right-1 top-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#0d2b1d]/80 text-[12px] font-bold text-[#E3EFD3]"
                           onClick={() => removeGalleryPhoto(index)}
                         >
                           ×
@@ -271,55 +277,52 @@ export function ProfileTab() {
                       )}
                     </div>
                   ))}
+
                   {editingProfile && safeProfileInfo.galleryPhotos.length < 5 && (
-                    <label className="relative flex h-[70px] w-[70px] cursor-pointer items-center justify-center rounded-[14px] border border-dashed border-[#E3EFD3]/25 text-[11px] text-[var(--muted)]">
-                      <input type="file" accept="image/*" multiple className="absolute inset-0 opacity-0" onChange={handleGalleryChange} />
-                      + Добавить фото
+                    <label className="photoGallery__add">
+                      + Фото
+                      <input type="file" accept="image/*" multiple onChange={handleGalleryChange} />
                     </label>
                   )}
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2">
-                <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">Статус</div>
+              <label className="profileField">
+                <span className="profileField__label">Статус</span>
                 <input
-                  className="w-full rounded-2xl border border-[#E3EFD3]/20 bg-[#345635]/70 px-4 py-3 text-[14px] text-[var(--text)] placeholder:text-[var(--muted-2)] shadow-[inset_0_1px_0_rgba(227,239,211,0.25)] focus:outline-none focus:ring-2 focus:ring-[#6B8F71]/35 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="profileInput"
                   value={safeProfileInfo.status}
                   placeholder="Например, «люблю вечерние прогулки»"
                   onChange={(event) => setProfileInfo({ status: event.target.value })}
                   disabled={!editingProfile}
                 />
-              </div>
+              </label>
 
-              <div className="flex flex-col gap-2">
-                <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">О себе</div>
+              <label className="profileField">
+                <span className="profileField__label">О себе</span>
                 <textarea
-                  className="min-h-[110px] w-full resize-y rounded-2xl border border-[#E3EFD3]/20 bg-[#345635]/70 px-4 py-3 text-[14px] text-[var(--text)] placeholder:text-[var(--muted-2)] shadow-[inset_0_1px_0_rgba(227,239,211,0.25)] focus:outline-none focus:ring-2 focus:ring-[#6B8F71]/35 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="profileTextarea"
                   value={safeProfileInfo.about}
                   placeholder="Расскажи, какие места тебе нравятся и с кем ты любишь ходить."
                   onChange={(event) => setProfileInfo({ about: event.target.value })}
                   disabled={!editingProfile}
                 />
-              </div>
+              </label>
             </div>
           </section>
 
-          <section className="rounded-[28px] border border-[#E3EFD3]/20 bg-[var(--panel)] p-5 shadow-[var(--card-shadow)] backdrop-blur-2xl">
-            <div className="text-[16px] font-semibold">Настроение</div>
-            <p className="mt-1 text-[12px] text-[var(--muted)]">
-              Отметь, каким ты видишь себя: это помогает подобрать компаньона с близким вибе.
+          <section className="iosCard moodCard">
+            <div className="panelTitle">Настроение</div>
+            <p className="panelSubtitle">
+              Отметь, каким ты видишь себя — это помогает точнее подобрать компаньона.
             </p>
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="chipRow chipRow--wrap">
               {MOOD_OPTIONS.map((trait) => {
                 const active = safeProfileInfo.moodTraits.includes(trait)
                 return (
                   <button
                     key={trait}
-                    className={`rounded-full border px-3 py-1.5 text-[12px] font-medium transition disabled:cursor-not-allowed disabled:opacity-50 ${
-                      active
-                        ? 'border-[#6B8F71]/45 bg-[#6B8F71]/20 text-[#E3EFD3]'
-                        : 'border-[#E3EFD3]/15 bg-[#345635]/70 text-[var(--text)]'
-                    }`}
+                    className={`pill ${active ? 'pill--active' : ''}`}
                     aria-pressed={active}
                     onClick={() => toggleMood(trait)}
                     disabled={!editingProfile}
@@ -331,22 +334,18 @@ export function ProfileTab() {
             </div>
           </section>
 
-          <section className="rounded-[28px] border border-[#E3EFD3]/20 bg-[var(--panel)] p-5 shadow-[var(--card-shadow)] backdrop-blur-2xl">
-            <div className="text-[16px] font-semibold">Хобби и активности</div>
-            <p className="mt-1 text-[12px] text-[var(--muted)]">
-              Выбирай всё, что нравится: от спорта до тихих вечеров — это влияет на то, о чем можно говорить.
+          <section className="iosCard hobbyCard">
+            <div className="panelTitle">Хобби и активности</div>
+            <p className="panelSubtitle">
+              Выбирай всё, что нравится: от спорта до творческих вечеров.
             </p>
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="chipRow chipRow--wrap">
               {HOBBY_OPTIONS.map((hobby) => {
                 const active = safeProfileInfo.hobbies.includes(hobby)
                 return (
                   <button
                     key={hobby}
-                    className={`rounded-full border px-3 py-1.5 text-[12px] font-medium transition disabled:cursor-not-allowed disabled:opacity-50 ${
-                      active
-                        ? 'border-[#6B8F71]/45 bg-[#6B8F71]/20 text-[#E3EFD3]'
-                        : 'border-[#E3EFD3]/15 bg-[#345635]/70 text-[var(--text)]'
-                    }`}
+                    className={`pill ${active ? 'pill--active' : ''}`}
                     aria-pressed={active}
                     onClick={() => toggleHobby(hobby)}
                     disabled={!editingProfile}
@@ -358,13 +357,13 @@ export function ProfileTab() {
             </div>
           </section>
 
-          <section className="rounded-[28px] border border-[#E3EFD3]/20 bg-[var(--panel)] p-5 shadow-[var(--card-shadow)] backdrop-blur-2xl">
-            <div className="text-[16px] font-semibold">Основные параметры</div>
-            <div className="mt-4 grid gap-3">
-              <label className="flex flex-col gap-2">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">Пол</span>
+          <section className="iosCard parametersCard">
+            <div className="panelTitle">Основные параметры</div>
+            <div className="profileCard__body">
+              <label className="profileField">
+                <span className="profileField__label">Пол</span>
                 <select
-                  className="w-full rounded-2xl border border-[#E3EFD3]/20 bg-[#345635]/70 px-4 py-3 text-[14px] text-[var(--text)] shadow-[inset_0_1px_0_rgba(227,239,211,0.25)] focus:outline-none focus:ring-2 focus:ring-[#6B8F71]/35 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="profileInput"
                   value={safeProfileInfo.gender}
                   onChange={(event) => setProfileInfo({ gender: event.target.value as GenderOption })}
                   disabled={!editingProfile}
@@ -374,23 +373,25 @@ export function ProfileTab() {
                   <option value="male">Мужской</option>
                 </select>
               </label>
-              <label className="flex flex-col gap-2">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">Возраст</span>
+
+              <label className="profileField">
+                <span className="profileField__label">Возраст</span>
                 <input
+                  className="profileInput"
                   type="number"
                   min={18}
                   max={120}
                   placeholder="Например, 25"
-                  className="w-full rounded-2xl border border-[#E3EFD3]/20 bg-[#345635]/70 px-4 py-3 text-[14px] text-[var(--text)] shadow-[inset_0_1px_0_rgba(227,239,211,0.25)] focus:outline-none focus:ring-2 focus:ring-[#6B8F71]/35 disabled:cursor-not-allowed disabled:opacity-60"
                   value={safeProfileInfo.age ?? ''}
                   onChange={(event) => handleAgeChange(event.target.value)}
                   disabled={!editingProfile}
                 />
               </label>
-              <label className="flex flex-col gap-2">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">Предпочитаемый пол</span>
+
+              <label className="profileField">
+                <span className="profileField__label">Предпочитаемый пол</span>
                 <select
-                  className="w-full rounded-2xl border border-[#E3EFD3]/20 bg-[#345635]/70 px-4 py-3 text-[14px] text-[var(--text)] shadow-[inset_0_1px_0_rgba(227,239,211,0.25)] focus:outline-none focus:ring-2 focus:ring-[#6B8F71]/35 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="profileInput"
                   value={safeProfileInfo.preferredGender}
                   onChange={(event) => setProfileInfo({ preferredGender: event.target.value })}
                   disabled={!editingProfile}
@@ -400,25 +401,26 @@ export function ProfileTab() {
                   <option value="male">Мужчины</option>
                 </select>
               </label>
-              <div className="flex flex-col gap-2">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">Возраст компаньона</span>
-                <div className="flex gap-2">
+
+              <div className="profileField">
+                <span className="profileField__label">Возраст компаньона</span>
+                <div className="registerRange">
                   <input
+                    className="profileInput"
                     type="number"
                     min={18}
                     max={120}
                     placeholder="от"
-                    className="w-full rounded-2xl border border-[#E3EFD3]/20 bg-[#345635]/70 px-4 py-3 text-[14px] text-[var(--text)] shadow-[inset_0_1px_0_rgba(227,239,211,0.25)] focus:outline-none focus:ring-2 focus:ring-[#6B8F71]/35 disabled:cursor-not-allowed disabled:opacity-60"
                     value={safeProfileInfo.preferredMinAge ?? ''}
                     onChange={(event) => handlePreferredMinAgeChange(event.target.value)}
                     disabled={!editingProfile}
                   />
                   <input
+                    className="profileInput"
                     type="number"
                     min={18}
                     max={120}
                     placeholder="до"
-                    className="w-full rounded-2xl border border-[#E3EFD3]/20 bg-[#345635]/70 px-4 py-3 text-[14px] text-[var(--text)] shadow-[inset_0_1px_0_rgba(227,239,211,0.25)] focus:outline-none focus:ring-2 focus:ring-[#6B8F71]/35 disabled:cursor-not-allowed disabled:opacity-60"
                     value={safeProfileInfo.preferredMaxAge ?? ''}
                     onChange={(event) => handlePreferredMaxAgeChange(event.target.value)}
                     disabled={!editingProfile}
@@ -428,52 +430,43 @@ export function ProfileTab() {
             </div>
           </section>
 
-          <section
-            className={`rounded-[28px] border p-5 shadow-[var(--card-shadow)] backdrop-blur-2xl ${
-              testCompleted
-                ? 'border-[#E3EFD3]/20 bg-[var(--panel)]'
-                : 'border-[#6B8F71]/45 bg-gradient-to-b from-[#345635]/90 to-[#6B8F71]/20'
-            }`}
-          >
-            <div className="flex items-start justify-between gap-4">
+          <section className={`iosCard testPanel ${!testCompleted ? 'testPanel--attention' : 'testPanel--complete'}`}>
+            <div className="testPanel__header">
               <div>
-                <div className="text-[18px] font-semibold">Пройди тест</div>
-                <p className="mt-1 text-[13px] text-[var(--muted)]">
-                  Отвечай на шкалы, чтобы мы собрали вектор твоих предпочтений. Чем точнее — тем интереснее совпадения.
+                <div className="testPanel__title">Тест предпочтений</div>
+                <p className="testPanel__subtitle">
+                  Отвечай на шкалы: чем точнее ответы, тем лучше совпадения и рекомендации.
                 </p>
               </div>
-              <span className="rounded-full bg-[#345635]/60 px-3 py-1 text-[11px] font-semibold text-[var(--muted)]">
-                {!testCompleted ? 'Ожидает' : 'Готово'}
-              </span>
+              <span className="testPanel__badge">{testCompleted ? 'Готово' : 'Ожидает'}</span>
             </div>
-            <div className="mt-4 flex items-center justify-between gap-3">
-              <button
-                type="button"
-                className="inline-flex items-center justify-center rounded-full bg-gradient-to-br from-[#6B8F71] to-[#AEC3B0] px-4 py-2 text-[13px] font-semibold text-[#0d2b1d] shadow-[0_12px_30px_rgba(13,43,29,0.35)] transition active:scale-[0.98]"
-                onClick={startSurvey}
-              >
+
+            <div className="testPanel__body">
+              <button className="iosButton iosButton--primary" onClick={startSurvey}>
                 {testCompleted ? 'Обновить тест' : 'Начать тест'}
               </button>
-              <div className="text-[12px] text-[var(--muted)]">
-                {!testCompleted ? 'Тест ещё не пройден' : 'Результаты уже сформированы'}
+              <div className="testPanel__hint">
+                {testCompleted ? 'Результаты уже сформированы' : 'Тест ещё не пройден'}
               </div>
             </div>
 
             {surveyActive && (
-                <div className="mt-4 flex flex-col gap-3 rounded-2xl border border-[#E3EFD3]/20 bg-[#345635]/60 p-4 shadow-[inset_0_1px_0_rgba(227,239,211,0.25)]">
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="text-[15px] font-semibold">{currentQuestion.left}</div>
-                    <button
-                      type="button"
-                      className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#345635]/60 text-[18px] text-[#E3EFD3]"
-                      onClick={() => setSurveyActive(false)}
-                      aria-label="Закрыть тест"
-                    >
+              <div className="surveyInline">
+                <div className="surveyInline__header">
+                  <div className="surveyInline__question">{currentQuestion.left}</div>
+                  <button
+                    type="button"
+                    className="surveyInline__close"
+                    onClick={() => setSurveyActive(false)}
+                    aria-label="Закрыть тест"
+                  >
                     ×
                   </button>
                 </div>
-                <div className="text-[13px] text-[var(--muted)]">{currentQuestion.right}</div>
-                <div className="flex flex-col gap-2">
+
+                <div className="surveyInline__question--right">{currentQuestion.right}</div>
+
+                <div className="surveyInline__slider">
                   <input
                     type="range"
                     min={0}
@@ -481,33 +474,29 @@ export function ProfileTab() {
                     step={1}
                     value={currentValue}
                     onChange={(event) => updateSurveyResponse(currentQuestion.id, Number(event.target.value))}
-                    className="w-full accent-[#6B8F71]"
                   />
-                  <div className="flex items-center justify-between text-[12px] text-[var(--muted)]">
-                    <span>-3</span>
-                    <span>
-                      {hintForValue(currentValue)} ({toIntValue(currentValue)})
-                    </span>
-                    <span>+3</span>
-                  </div>
                 </div>
-                <div className="flex items-center justify-between gap-3">
+
+                <div className="surveyInline__values">
+                  <span>-3</span>
+                  <span>
+                    {hintForValue(currentValue)} ({toIntValue(currentValue)})
+                  </span>
+                  <span>+3</span>
+                </div>
+
+                <div className="surveyInline__footer">
                   <button
-                    type="button"
-                    className="inline-flex items-center justify-center rounded-full border border-[#E3EFD3]/20 bg-[#345635]/60 px-3 py-1.5 text-[12px] font-semibold text-[var(--text)] transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                    className="iosButton iosButton--ghost iosButton--small"
                     onClick={handlePrevQuestion}
                     disabled={currentQuestionIndex === 0}
                   >
                     Назад
                   </button>
-                  <div className="text-[12px] text-[var(--muted)]">
+                  <span className="surveyInline__progress">
                     {currentQuestionIndex + 1} / {SURVEY_QUESTIONS.length}
-                  </div>
-                  <button
-                    type="button"
-                    className="inline-flex items-center justify-center rounded-full bg-gradient-to-br from-[#6B8F71] to-[#AEC3B0] px-3 py-1.5 text-[12px] font-semibold text-[#0d2b1d] shadow-[0_10px_22px_rgba(13,43,29,0.35)] transition active:scale-[0.98]"
-                    onClick={handleNextQuestion}
-                  >
+                  </span>
+                  <button className="iosButton iosButton--primary iosButton--small" onClick={handleNextQuestion}>
                     {currentQuestionIndex === SURVEY_QUESTIONS.length - 1 ? 'Завершить' : 'Далее'}
                   </button>
                 </div>
@@ -515,27 +504,26 @@ export function ProfileTab() {
             )}
           </section>
 
-          <section className="rounded-[28px] border border-[#E3EFD3]/20 bg-[var(--panel)] p-5 shadow-[var(--card-shadow)] backdrop-blur-2xl">
-            <div className="text-[16px] font-semibold">Категории</div>
-            <div className="mt-4 grid gap-4">
+          <section className="iosCard">
+            <div className="panelTitle">Категории</div>
+            <div className="categoryGrid">
               {CATEGORY_SECTIONS.map((section) => (
-                <div key={section.id} className="rounded-2xl border border-[#E3EFD3]/20 bg-[#345635]/70 p-4 shadow-[inset_0_1px_0_rgba(227,239,211,0.25)]">
-                  <div className="flex items-start justify-between gap-3">
+                <div key={section.id} className="categoryCard">
+                  <div className="categoryCard__header">
                     <div>
-                      <strong className="text-[14px]">{section.title}</strong>
-                      <p className="mt-1 text-[12px] text-[var(--muted)]">{section.description}</p>
+                      <strong>{section.title}</strong>
+                      <p>{section.description}</p>
                     </div>
-                    <span className="rounded-full bg-[#345635]/60 px-3 py-1 text-[11px] font-semibold text-[var(--muted)]">
-                      {CATEGORY_TYPE_LABELS[section.categoryType]}
-                    </span>
+                    <span className="categoryCard__badge">{CATEGORY_TYPE_LABELS[section.categoryType]}</span>
                   </div>
-                  <div className="mt-4 flex flex-col gap-3">
+
+                  <div className="categoryFields">
                     {section.fields.map((field) => (
-                      <label key={field.id} className="flex flex-col gap-2 text-[13px] text-[var(--text)]">
-                        <span className="font-medium">{field.label}</span>
+                      <label key={field.id} className="categoryField">
+                        <span>{field.label}</span>
+
                         {field.type === 'single' ? (
                           <select
-                            className="w-full rounded-2xl border border-[#E3EFD3]/20 bg-[#345635]/70 px-3 py-2 text-[13px] text-[var(--text)] shadow-[inset_0_1px_0_rgba(227,239,211,0.25)] focus:outline-none focus:ring-2 focus:ring-[#6B8F71]/35 disabled:cursor-not-allowed disabled:opacity-60"
                             value={(safeProfileInfo.categoryAnswers[field.id] as string) || ''}
                             onChange={(event) => handleCategoryChange(field.id, event.target.value)}
                             disabled={!editingProfile}
@@ -548,30 +536,28 @@ export function ProfileTab() {
                             ))}
                           </select>
                         ) : (
-                          <div className="flex flex-wrap gap-2">
+                          <div className="categoryChips">
                             {field.options.map((option) => {
                               const selected = Array.isArray(safeProfileInfo.categoryAnswers[field.id])
                                 ? (safeProfileInfo.categoryAnswers[field.id] as string[]).includes(option)
                                 : false
+
                               return (
                                 <button
                                   key={option}
                                   type="button"
-                                  className={`rounded-full border px-3 py-1 text-[12px] font-medium transition disabled:cursor-not-allowed disabled:opacity-50 ${
-                                    selected
-                                      ? 'border-[#6B8F71]/45 bg-[#6B8F71]/20 text-[#E3EFD3]'
-                                      : 'border-[#E3EFD3]/15 bg-[#345635]/70 text-[var(--text)]'
-                                  }`}
+                                  className={`categoryChip ${selected ? 'is-active' : ''}`}
                                   onClick={() => toggleCategoryOption(field.id, option)}
                                   disabled={!editingProfile}
                                 >
                                   {option}
                                 </button>
-                              )}
-                            )}
+                              )
+                            })}
                           </div>
                         )}
-                        {field.helper && <small className="text-[11px] text-[var(--muted)]">{field.helper}</small>}
+
+                        {field.helper && <small className="categoryHelper">{field.helper}</small>}
                       </label>
                     ))}
                   </div>
@@ -580,37 +566,42 @@ export function ProfileTab() {
             </div>
           </section>
 
-          <section className="rounded-[28px] border border-[#E3EFD3]/20 bg-[var(--panel)] p-5 shadow-[var(--card-shadow)] backdrop-blur-2xl">
-            <div className="text-[16px] font-semibold">История</div>
-            <div className="mt-4 grid grid-cols-2 gap-4">
-              <div className="rounded-2xl border border-[#E3EFD3]/20 bg-[#345635]/70 p-4">
-                <div className="text-[12px] text-[var(--muted)]">Лайков</div>
-                <div className="mt-1 text-[20px] font-semibold">{likeSummary.count}</div>
+          <section className="iosCard historyCard">
+            <div className="panelTitle">История</div>
+            <div className="historySummary">
+              <div>
+                <div className="historySummary__label">Лайков</div>
+                <div className="historySummary__value">{likeSummary.count}</div>
               </div>
-              <div className="rounded-2xl border border-[#E3EFD3]/20 bg-[#345635]/70 p-4">
-                <div className="text-[12px] text-[var(--muted)]">Последнее место</div>
-                <div className="mt-1 text-[14px] font-semibold">{lastLikedName ?? 'Пока нет'}</div>
+              <div>
+                <div className="historySummary__label">Последнее место</div>
+                <div className="historySummary__value">{lastLikedName ?? 'Пока нет'}</div>
               </div>
             </div>
-            <div className="mt-4 flex flex-col gap-3" aria-label="История действий">
+
+            <div className="list" aria-label="История действий">
               {historyView.length === 0 ? (
-                <div className="flex items-center gap-3 rounded-2xl border border-[#E3EFD3]/20 bg-[#345635]/70 p-3">
-                  <div className="h-12 w-12 rounded-[14px] border border-[#E3EFD3]/20 bg-gradient-to-br from-[#AEC3B0]/30 to-[#6B8F71]/25" />
-                  <div>
-                    <div className="text-[14px] font-semibold">Пока пусто</div>
-                    <div className="mt-1 text-[12px] text-[var(--muted)]">Начни листать ленту, чтобы история ожила</div>
+                <div className="listItem">
+                  <div className="thumb" />
+                  <div className="listItem__main">
+                    <div className="listItem__title">Пока пусто</div>
+                    <div className="listItem__sub">Начни листать ленту, чтобы история ожила</div>
                   </div>
                 </div>
               ) : (
-                historyView.map(({ h, place }) => (
-                  <div key={`${h.placeId}:${h.at}`} className="flex items-center gap-3 rounded-2xl border border-[#E3EFD3]/20 bg-[#345635]/70 p-3">
-                    <div className="h-12 w-12 rounded-[14px] border border-[#E3EFD3]/20 bg-gradient-to-br from-[#AEC3B0]/30 to-[#6B8F71]/25" />
-                    <div className="min-w-0">
-                      <div className="truncate text-[14px] font-semibold">
-                        {place?.title ?? h.placeId} •{' '}
-                        {h.action === 'like' ? 'лайк' : h.action === 'skip' ? 'скип' : 'просмотр'}
+                historyView.map(({ entry, place }) => (
+                  <div key={`${entry.placeId}:${entry.at}`} className="listItem">
+                    <div className="thumb" />
+                    <div className="listItem__main">
+                      <div className="listItem__title">
+                        {place?.title ?? entry.placeId} •{' '}
+                        {entry.action === 'like'
+                          ? 'лайк'
+                          : entry.action === 'skip'
+                            ? 'скип'
+                            : 'просмотр'}
                       </div>
-                      <div className="mt-1 text-[12px] text-[var(--muted)]">{new Date(h.at).toLocaleString()}</div>
+                      <div className="listItem__sub">{new Date(entry.at).toLocaleString()}</div>
                     </div>
                   </div>
                 ))

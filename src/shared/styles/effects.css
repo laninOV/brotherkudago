@@ -1,54 +1,53 @@
 .bk-main {
   position: relative;
+  isolation: isolate;
 }
 
-.bk-main::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.045;
-  mix-blend-mode: multiply;
-  z-index: 1;
-  background-image: radial-gradient(circle at 10% 20%, rgba(43, 42, 41, 0.35) 0.4px, transparent 0.8px);
-  background-size: 4px 4px;
-}
-
-.bk-card {
-  transition: transform 260ms var(--retro-ease), box-shadow 260ms var(--retro-ease), border-color 260ms var(--retro-ease);
-  transform-origin: center;
-}
-
-.bk-card:hover {
-  transform: perspective(900px) rotateX(1.4deg) rotateY(-1.8deg) translateY(-6px);
-  box-shadow: var(--retro-shadow-lg);
-}
-
-.bk-pill--cta,
+.bk-card,
+.bk-service-card,
+.bk-hero__cta,
 .bk-site-footer__cta,
+.bk-feed__filters,
+.bk-header__login,
 .bk-service-card__button {
-  position: relative;
-  overflow: hidden;
+  transition:
+    transform var(--retro-duration-base) var(--retro-ease-snap),
+    box-shadow var(--retro-duration-base) var(--retro-ease-snap),
+    background-color var(--retro-duration-base) var(--retro-ease-snap);
 }
 
-.bk-pill--cta::after,
-.bk-site-footer__cta::after,
-.bk-service-card__button::after {
-  content: "";
-  position: absolute;
-  top: -120%;
-  left: -20%;
-  width: 36%;
-  height: 320%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.48), transparent);
-  transform: rotate(18deg);
-  opacity: 0;
-  transition: opacity 220ms var(--retro-ease), transform 420ms var(--retro-ease);
+.bk-card__media img[src=""],
+.bk-card__media img:not([src]) {
+  visibility: hidden;
 }
 
-.bk-pill--cta:hover::after,
-.bk-site-footer__cta:hover::after,
-.bk-service-card__button:hover::after {
-  opacity: 1;
-  transform: rotate(18deg) translateX(240%);
+.bk-card__media:has(img[src=""]),
+.bk-card__media:has(img:not([src])) {
+  background:
+    repeating-linear-gradient(45deg, rgba(14, 164, 194, 0.2) 0 12px, rgba(244, 234, 42, 0.2) 12px 24px),
+    linear-gradient(180deg, #f8f8f8, #ececec);
+}
+
+.bk-pill,
+.bk-button,
+.bk-pagination__page,
+.bk-pagination__nav,
+.bk-modal__nav,
+.bk-modal__close,
+.bk-auth-modal__close,
+.bk-top {
+  transition:
+    transform var(--retro-duration-fast) var(--retro-ease),
+    box-shadow var(--retro-duration-fast) var(--retro-ease);
+}
+
+.bk-pill:hover,
+.bk-button:hover,
+.bk-pagination__page:hover,
+.bk-pagination__nav:hover,
+.bk-modal__nav:hover:not(:disabled),
+.bk-modal__close:hover,
+.bk-auth-modal__close:hover,
+.bk-top:hover {
+  transform: translateY(-1px);
 }

@@ -80,11 +80,7 @@ export function MapTab() {
         </div>
       </div>
 
-      {loading && (
-        <div className="screen__subtitle" style={{ padding: '0 16px 8px' }}>
-          Загружаем точки на карте…
-        </div>
-      )}
+      {loading && <div className="screen__notice">Загружаем точки на карте…</div>}
 
       <div className="filtersToggleRow">
         <button
@@ -115,7 +111,7 @@ export function MapTab() {
             ))}
           </div>
 
-          <div className="filtersPanel__title" style={{ marginTop: 12 }}>
+          <div className="filtersPanel__title filtersPanel__title--offset">
             Быстрые фильтры
           </div>
           <div className="filterWrap" aria-label="Фильтры">
@@ -139,21 +135,12 @@ export function MapTab() {
         </div>
       )}
 
-      <div style={{ flex: 1, minHeight: 0, padding: '0 12px calc(var(--tabbar-offset) + 12px)' }}>
-        <div
-          style={{
-            height: '100%',
-            borderRadius: 22,
-            overflow: 'hidden',
-            border: '1px solid rgba(255,255,255,0.12)',
-            boxShadow: '0 14px 40px rgba(0,0,0,.45)',
-            position: 'relative',
-          }}
-        >
+      <div className="screen__body screen__body--map">
+        <div className="mapStage">
           <MapContainer
             center={center}
             zoom={13}
-            style={{ height: '100%', width: '100%' }}
+            className="mapStage__canvas"
             zoomControl={false}
           >
             <MapRecenter center={center} tick={recenterTick} />
@@ -190,8 +177,7 @@ export function MapTab() {
           </MapContainer>
 
           <button
-            className="filter"
-            style={{ position: 'absolute', right: 12, top: 12 }}
+            className="filter mapStage__recenter"
             onClick={() => setRecenterTick((v) => v + 1)}
             disabled={location.status !== 'ready'}
           >

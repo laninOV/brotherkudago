@@ -38,15 +38,21 @@ export function PlaceDetailsSheet({
       {!place ? null : (
         <div>
           <div className="detailsGallery" aria-label="Галерея">
-            {photos.map((src) => (
-              <div key={src} className="detailsGallery__item">
-                <img className="detailsGallery__img" src={src} alt="" loading="lazy" />
+            {photos.length > 0 ? (
+              photos.map((src) => (
+                <div key={src} className="detailsGallery__item">
+                  <img className="detailsGallery__img" src={src} alt="" loading="lazy" />
+                </div>
+              ))
+            ) : (
+              <div className="detailsGallery__item detailsGallery__item--placeholder">
+                <span>ОКОЛО</span>
               </div>
-            ))}
+            )}
           </div>
 
           <div className="detailsHeader">
-            <div style={{ minWidth: 0 }}>
+            <div className="detailsHeader__meta">
               <div className="detailsTitle">{place.title}</div>
               <div className="detailsSubtitle">{place.address}</div>
             </div>
@@ -75,7 +81,7 @@ export function PlaceDetailsSheet({
             ))}
           </div>
 
-          <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
+          <div className="detailsActions">
             <button className="actionBtn" onClick={() => tgOpenLink(routeUrl(place))}>
               Маршрут
             </button>
