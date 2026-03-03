@@ -28,7 +28,6 @@ type EventsCursor = {
 };
 
 let poolSingleton: Pool | null = null;
-let initPromise: Promise<void> | null = null;
 
 function hasDatabaseUrl() {
   return Boolean(process.env.DATABASE_URL?.trim());
@@ -42,11 +41,23 @@ function getDatabaseUrl() {
   return url;
 }
 
+function parsePositiveIntEnv(name: string, fallback: number) {
+  const raw = process.env[name];
+  if (!raw) return fallback;
+  const parsed = Number(raw);
+  if (!Number.isFinite(parsed) || parsed <= 0) return fallback;
+  return Math.floor(parsed);
+}
+
 function getPool() {
   if (poolSingleton) return poolSingleton;
   poolSingleton = new Pool({
     connectionString: getDatabaseUrl(),
     ssl: process.env.PG_SSL === "true" ? { rejectUnauthorized: false } : undefined,
+    max: parsePositiveIntEnv("PG_POOL_MAX", 2),
+    connectionTimeoutMillis: parsePositiveIntEnv("PG_CONNECT_TIMEOUT_MS", 5000),
+    idleTimeoutMillis: parsePositiveIntEnv("PG_IDLE_TIMEOUT_MS", 10000),
+    allowExitOnIdle: true,
   });
   return poolSingleton;
 }
@@ -333,96 +344,63 @@ function getEventsPageFromSeed(options: GetEventsPageOptions): EventsPage {
   };
 }
 
-async function initDb() {
-  if (initPromise) return initPromise;
+function getPgErrorCode(error: unknown): string | null {
+  if (!error || typeof error !== "object") return null;
+  const maybeCode = (error as { code?: unknown }).code;
+  return typeof maybeCode === "string" ? maybeCode : null;
+}
 
-  initPromise = (async () => {
-    const pool = getPool();
+function formatDbReadError(error: unknown) {
+  const code = getPgErrorCode(error);
 
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS events (
-        id TEXT PRIMARY KEY,
-        title TEXT NOT NULL,
-        starts_at TIMESTAMPTZ NOT NULL,
-        ends_at TIMESTAMPTZ,
-        city TEXT NOT NULL,
-        venue TEXT NOT NULL,
-        address TEXT,
-        lat DOUBLE PRECISION,
-        lng DOUBLE PRECISION,
-        category TEXT,
-        duration_min INTEGER,
-        price_min NUMERIC,
-        price_max NUMERIC,
-        currency TEXT,
-        tags_json JSONB,
-        image TEXT,
-        description TEXT,
-        url TEXT
-      );
-    `);
+  if (code === "42P01") {
+    return new Error(
+      "Database schema is missing: table `public.events` was not found. Apply Supabase migrations (for example: `supabase db push --linked`)."
+    );
+  }
 
-    await pool.query(`ALTER TABLE events ADD COLUMN IF NOT EXISTS lat DOUBLE PRECISION;`);
-    await pool.query(`ALTER TABLE events ADD COLUMN IF NOT EXISTS lng DOUBLE PRECISION;`);
-    await pool.query(`ALTER TABLE events ADD COLUMN IF NOT EXISTS category TEXT;`);
-    await pool.query(`ALTER TABLE events ADD COLUMN IF NOT EXISTS duration_min INTEGER;`);
+  if (code === "42703") {
+    return new Error(
+      "Database schema is outdated: expected `public.events` columns are missing. Apply the latest Supabase migrations (`supabase db push --linked`)."
+    );
+  }
 
-    await pool.query(`
-      UPDATE events
-      SET lat = COALESCE(lat, 55.7522),
-          lng = COALESCE(lng, 37.6156),
-          category = COALESCE(category, 'event')
-      WHERE lat IS NULL OR lng IS NULL OR category IS NULL;
-    `);
+  if (code === "42501") {
+    return new Error(
+      "Database permissions/RLS blocked the query. Ensure the server connects with a privileged DATABASE_URL and that migrations were applied."
+    );
+  }
 
-    await pool.query(`
-      CREATE INDEX IF NOT EXISTS events_starts_at_id_idx
-      ON events (starts_at ASC, id ASC);
-    `);
-    await pool.query(`
-      CREATE INDEX IF NOT EXISTS events_category_idx
-      ON events (category);
-    `);
+  if (error instanceof Error) return error;
+  return new Error("Unknown database error while querying events.");
+}
 
-    const countRes = await pool.query<{ count: string }>("SELECT COUNT(*)::text AS count FROM events");
-    const count = Number(countRes.rows[0]?.count ?? "0");
-    if (count > 0) return;
+export async function getEventsDbHealth() {
+  if (!hasDatabaseUrl()) {
+    return {
+      ok: false,
+      db: false,
+      mode: "seed-fallback" as const,
+      error: "DATABASE_URL is not configured. /api/events will use local seed fallback data.",
+    };
+  }
 
-    const seed = seedEvents();
-    for (const event of seed) {
-      await pool.query(
-        `INSERT INTO events (
-          id, title, starts_at, ends_at, city, venue, address, lat, lng, category, duration_min,
-          price_min, price_max, currency, tags_json, image, description, url
-        ) VALUES (
-          $1, $2, $3::timestamptz, $4::timestamptz, $5, $6, $7, $8, $9, $10, $11,
-          $12, $13, $14, $15::jsonb, $16, $17, $18
-        )`,
-        [
-          event.id,
-          event.title,
-          event.startsAt,
-          event.endsAt ?? null,
-          event.city,
-          event.venue,
-          event.address ?? null,
-          event.lat,
-          event.lng,
-          event.category ?? "event",
-          event.durationMin ?? null,
-          event.price?.min ?? null,
-          event.price?.max ?? null,
-          event.price?.currency ?? null,
-          JSON.stringify(event.tags ?? []),
-          event.image ?? null,
-          event.description ?? null,
-          event.url ?? null,
-        ]
-      );
-    }
-  })();
-
-  return initPromise;
+  try {
+    await getPool().query("SELECT 1");
+    return {
+      ok: true,
+      db: true,
+      mode: "database" as const,
+    };
+  } catch (error) {
+    const formatted = formatDbReadError(error);
+    return {
+      ok: false,
+      db: false,
+      mode: "database" as const,
+      error: formatted.message,
+    };
+  }
 }
 
 export async function getEventsFromDb(): Promise<EventRecord[]> {
@@ -435,7 +413,6 @@ export async function getEventsPageFromDb(options: GetEventsPageOptions): Promis
     return getEventsPageFromSeed(options);
   }
 
-  await initDb();
   const pool = getPool();
 
   const normalizedLimit = Math.min(Math.max(options.limit ?? 12, 1), 200);
@@ -443,7 +420,7 @@ export async function getEventsPageFromDb(options: GetEventsPageOptions): Promis
 
   const params: Array<string | number> = [normalizedLimit + 1];
   let nextParamIndex = 2;
-  const where: string[] = [];
+  const where: string[] = ["is_published = TRUE"];
 
   if (cursor) {
     const startsAtParam = nextParamIndex++;
@@ -501,32 +478,37 @@ export async function getEventsPageFromDb(options: GetEventsPageOptions): Promis
 
   const whereClause = where.length > 0 ? `WHERE ${where.join(" AND ")}` : "";
 
-  const res = await pool.query<DbRow>(
-    `SELECT
-      id,
-      title,
-      starts_at::text,
-      ends_at::text,
-      city,
-      venue,
-      address,
-      lat,
-      lng,
-      category,
-      duration_min,
-      price_min::text,
-      price_max::text,
-      currency,
-      tags_json,
-      image,
-      description,
-      url
-    FROM events
-    ${whereClause}
-    ORDER BY starts_at ASC, id ASC
-    LIMIT $1`,
-    params
-  );
+  let res: { rows: DbRow[] };
+  try {
+    res = await pool.query<DbRow>(
+      `SELECT
+        id,
+        title,
+        starts_at::text,
+        ends_at::text,
+        city,
+        venue,
+        address,
+        lat,
+        lng,
+        category,
+        duration_min,
+        price_min::text,
+        price_max::text,
+        currency,
+        tags_json,
+        image,
+        description,
+        url
+      FROM public.events
+      ${whereClause}
+      ORDER BY starts_at ASC, id ASC
+      LIMIT $1`,
+      params
+    );
+  } catch (error) {
+    throw formatDbReadError(error);
+  }
 
   const rows = res.rows;
   const hasMore = rows.length > normalizedLimit;

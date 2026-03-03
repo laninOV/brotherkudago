@@ -1,0 +1,2 @@
+-- Intentionally empty.
+-- MVP seed data is tracked as a regular migration: 20260225121000_seed_initial_events_mvp.sql
