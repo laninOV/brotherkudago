@@ -65,29 +65,24 @@
   }
 
   .bk-modal {
-    width: min(980px, calc(100vw - 14px));
-  }
-
-  .bk-modal__nav {
-    position: static;
-    transform: none;
-  }
-
-  .bk-modal__nav--prev,
-  .bk-modal__nav--next {
-    inset: auto;
+    width: min(940px, calc(100vw - 14px));
+    max-height: calc(100dvh - 28px);
   }
 
   .bk-modal__content {
-    display: grid;
-    gap: 10px;
+    max-height: calc(100dvh - 32px);
+    padding: 58px 14px 14px;
+  }
+
+  .bk-modal__grid {
+    gap: 14px;
   }
 }
 
 @media (max-width: 760px) {
   :root {
     --bk-header-h: 148px;
-    --bk-card-h: 246px;
+    --bk-card-h: 260px;
     --bk-card-footer-h: 88px;
     --bk-card-desc-lines: 2;
   }
@@ -190,22 +185,24 @@
   }
 
   .bk-card__media {
-    padding: 4px;
+    padding: 0;
   }
 
   .bk-card__body {
-    gap: 4px;
-    padding: 6px 6px 7px;
+    padding: 10px 10px 12px;
   }
 
   .bk-card__title {
-    font-size: clamp(10px, 2.5vw, 12px);
-    line-height: 1.15;
+    font-size: clamp(18px, 5.2vw, 24px);
+    line-height: 0.96;
+  }
+
+  .bk-card__location {
+    display: none;
   }
 
   .bk-card__desc {
-    font-size: clamp(9px, 2.2vw, 11px);
-    line-height: 1.2;
+    display: none;
   }
 
   .bk-feed__controls-col--right {
@@ -238,11 +235,38 @@
   .bk-modal__grid {
     grid-template-columns: 1fr;
   }
+
+  .bk-modal__media {
+    gap: 8px;
+  }
+
+  .bk-modal__thumbs {
+    margin-top: 2px;
+    padding-bottom: 4px;
+  }
+
+  .bk-modal__thumb {
+    flex: 0 0 78px;
+    height: 56px;
+  }
+
+  .bk-modal__grid > :last-child {
+    border-left: 0;
+    border-top: 2px solid #121212;
+    padding-left: 0;
+    padding-top: 12px;
+  }
+
+  .bk-modal__title {
+    font-size: clamp(30px, 9.2vw, 42px);
+    line-height: 0.92;
+  }
+
 }
 
 @media (max-width: 420px) {
   :root {
-    --bk-card-h: 206px;
+    --bk-card-h: 236px;
     --bk-card-footer-h: 80px;
     --bk-card-desc-lines: 2;
   }
@@ -272,22 +296,24 @@
   }
 
   .bk-card__media {
-    padding: 3px;
+    padding: 0;
   }
 
   .bk-card__body {
-    gap: 3px;
-    padding: 5px 5px 6px;
+    padding: 8px 8px 10px;
   }
 
   .bk-card__title {
-    font-size: clamp(9px, 2.55vw, 10px);
-    line-height: 1.14;
+    font-size: clamp(16px, 5.8vw, 21px);
+    line-height: 0.95;
+  }
+
+  .bk-card__location {
+    display: none;
   }
 
   .bk-card__desc {
-    font-size: clamp(8px, 2.35vw, 9px);
-    line-height: 1.2;
+    display: none;
   }
 
   .bk-service-card h3 {

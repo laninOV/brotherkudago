@@ -62,7 +62,7 @@ export const MATCH_PROFILES: MatchProfile[] = [
     id: 'misha',
     name: 'Миша, 33',
     age: 33,
-    photo: 'https://images.unsplash.com/photo-1544723795-43253735b7d1?auto=format&fit=crop&w=400&q=80',
+    photo: '/iloveeventfest_files/meis-s800x600.jpg',
     summary: 'Поклонник активностей на свежем воздухе и уютных бесед.',
     vibe: 'any',
     transport: 'car',

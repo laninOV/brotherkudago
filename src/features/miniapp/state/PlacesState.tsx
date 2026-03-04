@@ -30,7 +30,7 @@ function eventToPlace(event: EventRecord): Place {
     openNow: true,
     durationMin: event.durationMin ?? 90,
     image: event.image,
-    photos: event.image ? [event.image] : [],
+    photos: event.gallery?.length ? event.gallery : event.image ? [event.image] : [],
     description: event.description,
     url: event.url,
   };

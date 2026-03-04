@@ -495,40 +495,45 @@ body {
 }
 
 .bk-card {
-  background: #ffffff;
-  box-shadow: none;
-  transition: border-color 160ms var(--retro-ease), background-color 160ms var(--retro-ease);
+  background: #fffdf8;
+  box-shadow: 8px 8px 0 rgba(18, 18, 18, 0.2);
+  transition: transform 180ms var(--retro-ease), box-shadow 180ms var(--retro-ease);
 }
 
 .bk-card:hover {
-  transform: none;
-  box-shadow: none;
-  border-color: #121212;
-  background: #ffffff;
+  box-shadow: 12px 12px 0 rgba(18, 18, 18, 0.26);
+  border-color: #0f0f0f;
+  background: #fffdf8;
 }
 
 .bk-card__media::after {
-  content: none;
+  content: "";
 }
 
 .bk-card__media {
-  background: #ececea;
+  background: #cedbe0;
 }
 
 .bk-card__body {
-  padding: 8px 10px 10px;
+  padding: 14px 14px 16px;
 }
 
 .bk-card__title {
-  font-size: clamp(14px, 1.01vw, 16px);
-  line-height: 1.14;
-  font-weight: 900;
+  font-family: var(--bk-font-display);
+  font-size: clamp(24px, 2vw, 34px);
+  line-height: 0.96;
+  letter-spacing: -0.014em;
+  font-weight: 400;
+  color: #ffffff;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
+}
+
+.bk-card__location {
+  display: none;
 }
 
 .bk-card__desc {
-  color: rgba(18, 18, 18, 0.76);
-  font-size: clamp(12px, 0.88vw, 14px);
-  line-height: 1.2;
+  display: none;
 }
 
 .bk-meta__item,
@@ -888,7 +893,7 @@ body {
 }
 
 .bk-modal {
-  box-shadow: 0 20px 36px rgba(18, 18, 18, 0.24);
+  box-shadow: 14px 14px 0 rgba(18, 18, 18, 0.28), 0 24px 42px rgba(18, 18, 18, 0.24);
 }
 
 .bk-modal__title {
@@ -897,6 +902,11 @@ body {
 
 .bk-modal__row .bk-pill {
   background: var(--bk-yellow);
+}
+
+.bk-modal__row .bk-pill:first-child {
+  background: var(--bk-coral);
+  color: #ffffff;
 }
 
 .bk-auth-modal {

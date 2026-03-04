@@ -41,7 +41,18 @@ export function PlaceDetailsSheet({
             {photos.length > 0 ? (
               photos.map((src) => (
                 <div key={src} className="detailsGallery__item">
-                  <img className="detailsGallery__img" src={src} alt="" loading="lazy" />
+                  <img
+                    className="detailsGallery__img"
+                    src={src}
+                    alt=""
+                    loading="lazy"
+                    onError={(event) => {
+                      const img = event.currentTarget
+                      if (img.dataset.fallbackApplied === '1') return
+                      img.dataset.fallbackApplied = '1'
+                      img.src = '/main-flower.png'
+                    }}
+                  />
                 </div>
               ))
             ) : (

@@ -31,10 +31,9 @@ export const PLACES: Place[] = [
     lng: 37.6032,
     openNow: true,
     durationMin: 120,
-    image:
-      'https://images.unsplash.com/photo-1526481280695-3c687fd643ed?auto=format&fit=crop&w=1200&q=80',
+    image: '/iloveeventfest_files/uitvoering-popkoor-haarlemmermeer-s800x600.jpg',
     photos: [
-      'https://images.unsplash.com/photo-1526481280695-3c687fd643ed?auto=format&fit=crop&w=1400&q=80',
+      '/iloveeventfest_files/uitvoering-popkoor-haarlemmermeer-s800x600.jpg',
       'https://images.unsplash.com/photo-1520975958225-71bb0bd1a58e?auto=format&fit=crop&w=1400&q=80',
       'https://images.unsplash.com/photo-1473445361085-b9a07f55608b?auto=format&fit=crop&w=1400&q=80',
     ],

@@ -36,7 +36,7 @@ values
     3000,
     'RUB',
     '["ресторан","бар","этническая музыка"]'::jsonb,
-    'https://scontent-fra3-1.cdninstagram.com/v/t51.82787-15/628060285_17851450998654319_3642420885353076683_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=103&ig_cache_key=MzgyNDMxOTg4Nzk4OTAzMDQ4OTE3ODUxNDUwOTkyNjU0MzE5.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjc2MHgxMzUwLnNkci5DMyJ9&_nc_ohc=e4ThFcL5xNAQ7kNvwHDvoJm&_nc_oc=AdmH5eoPNahUlFVnEQpq9uz2j70QXwjupMKCtJw8qMWx0hgSm8cPl8-QbSE0GVzhrhQTD1bN95eb-L5Vl599Zqmh&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-fra3-1.cdninstagram.com&_nc_gid=wE-kxWQk8B1EFM8dSLMhYA&oh=00_AfuXs_s4Qj5zjQaOzA-8JL-beLDTbfU9USr0DwXhIDW17w&oe=698B921E',
+    '/iloveeventfest_files/peter-van-rooijen-band-s800x600.jpg',
     'Еда — про память, напитки — про выбор. Контактный бар и музыка для новых знакомств.',
     'https://www.instagram.com/tatooine.rest/',
     true
@@ -99,7 +99,7 @@ values
     null,
     'RUB',
     '["лекции","наука","искусство"]'::jsonb,
-    'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=80',
+    '/iloveeventfest_files/uitvoering-popkoor-haarlemmermeer-s800x600.jpg',
     'О том, как арт-практики и исследования меняют городской опыт.',
     'https://t.me/okolodating_bot',
     true
@@ -162,7 +162,7 @@ values
     null,
     'RUB',
     '["парк","кофе","набережная"]'::jsonb,
-    'https://images.unsplash.com/photo-1526481280695-3c687fd643ed?auto=format&fit=crop&w=1200&q=80',
+    '/iloveeventfest_files/uitvoering-popkoor-haarlemmermeer-s800x600.jpg',
     'Прогулка по набережной и короткая остановка в кофейне.',
     'https://t.me/okolodating_bot',
     true
@@ -209,6 +209,69 @@ values
     'https://t.me/okolodating_bot',
     true
   )
+on conflict (id) do update
+set
+  title = excluded.title,
+  starts_at = excluded.starts_at,
+  ends_at = excluded.ends_at,
+  city = excluded.city,
+  venue = excluded.venue,
+  address = excluded.address,
+  lat = excluded.lat,
+  lng = excluded.lng,
+  category = excluded.category,
+  duration_min = excluded.duration_min,
+  price_min = excluded.price_min,
+  price_max = excluded.price_max,
+  currency = excluded.currency,
+  tags_json = excluded.tags_json,
+  image = excluded.image,
+  description = excluded.description,
+  url = excluded.url,
+  is_published = excluded.is_published;
+
+insert into public.events (
+  id,
+  title,
+  starts_at,
+  ends_at,
+  city,
+  venue,
+  address,
+  lat,
+  lng,
+  category,
+  duration_min,
+  price_min,
+  price_max,
+  currency,
+  tags_json,
+  image,
+  description,
+  url,
+  is_published
+)
+values (
+  'db-evt-010',
+  'УСАДЬБА ДУБРОВИЦЫ МУЗЕЙ, КОТОРОГО НЕТ',
+  '2026-02-01T09:00:00+03:00'::timestamptz,
+  null,
+  'Подольск',
+  'Маршрут по городу',
+  'Московская область, Подольск',
+  55.4317,
+  37.5451,
+  'walk',
+  480,
+  0,
+  null,
+  'RUB',
+  '["маршрут","поездка","архитектура","история"]'::jsonb,
+  '/events/podolsk/podolsk-01.jpg',
+  E'Подольск расположен всего в 43 км от Москвы — отличное направление для короткого путешествия на один день. Добраться можно двумя способами: на машине или общественным транспортом (метро + пригородный автобус). В дороге вы проведёте меньше двух часов.\n\nПервой точкой маршрута стоит выбрать усадьба Дубровицы — парковка на территории бесплатная. Здесь же находится знаменитая Церковь Иконы Богоматери Знамения, а после осмотра можно прогуляться по парку вдоль река Десна.\n\nЕсли останется время, загляните и в другие достопримечательности города:\n— Троицкий собор\n— усадьба Ивановское\n— музей-заповедник «Подолье»\n\nДля завтрака подойдёт кафе Здрасте. Если решите остаться в городе до вечера, отправляйтесь на обед или ужин в гастропространство Депо (на Комсомольской улице, 3) — здесь представлена кухня на любой вкус.',
+  'https://dubrovitsi.ru/',
+  true
+)
 on conflict (id) do update
 set
   title = excluded.title,

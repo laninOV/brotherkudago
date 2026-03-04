@@ -18,6 +18,7 @@ type DbRow = {
   currency: "RUB" | "EUR" | "USD" | null;
   tags_json: unknown;
   image: string | null;
+  gallery_json: unknown;
   description: string | null;
   url: string | null;
 };
@@ -28,6 +29,7 @@ type EventsCursor = {
 };
 
 let poolSingleton: Pool | null = null;
+const ONLY_EVENT_ID = "db-evt-010";
 
 function hasDatabaseUrl() {
   return Boolean(process.env.DATABASE_URL?.trim());
@@ -65,165 +67,40 @@ function getPool() {
 function seedEvents(): EventRecord[] {
   return [
     {
-      id: "db-evt-001",
-      title: "Кантина Tatooine: ужин и контактный бар",
-      startsAt: "2026-02-10T19:00:00+03:00",
-      city: "Москва",
-      venue: "Кантина | Ресторан-бар Tatooine",
-      address: "ул. Петровка, 23/10с5",
-      lat: 55.7648,
-      lng: 37.6174,
-      category: "cafe",
-      durationMin: 120,
-      price: { min: 1500, max: 3000, currency: "RUB" },
-      tags: ["ресторан", "бар", "этническая музыка"],
-      image:
-        "https://scontent-fra3-1.cdninstagram.com/v/t51.82787-15/628060285_17851450998654319_3642420885353076683_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=103&ig_cache_key=MzgyNDMxOTg4Nzk4OTAzMDQ4OTE3ODUxNDUwOTkyNjU0MzE5.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjc2MHgxMzUwLnNkci5DMyJ9&_nc_ohc=e4ThFcL5xNAQ7kNvwHDvoJm&_nc_oc=AdmH5eoPNahUlFVnEQpq9uz2j70QXwjupMKCtJw8qMWx0hgSm8cPl8-QbSE0GVzhrhQTD1bN95eb-L5Vl599Zqmh&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-fra3-1.cdninstagram.com&_nc_gid=wE-kxWQk8B1EFM8dSLMhYA&oh=00_AfuXs_s4Qj5zjQaOzA-8JL-beLDTbfU9USr0DwXhIDW17w&oe=698B921E",
-      description:
-        "Еда — про память, напитки — про выбор. Контактный бар и музыка для новых знакомств.",
-      url: "https://www.instagram.com/tatooine.rest/",
-    },
-    {
-      id: "db-evt-002",
-      title: "Ночная экскурсия по музею",
-      startsAt: "2026-02-14T21:00:00+03:00",
-      city: "Москва",
-      venue: "Музей современного искусства",
-      address: "ул. Остоженка, 16",
-      lat: 55.7391,
-      lng: 37.6035,
-      category: "event",
-      durationMin: 90,
-      price: { min: 700, currency: "RUB" },
-      tags: ["музеи", "выставки", "события"],
-      image: "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=1200&q=80",
-      description: "Ночной маршрут с куратором и короткими интерактивами.",
-      url: "https://t.me/okolodating_bot",
-    },
-    {
-      id: "db-evt-003",
-      title: "Гончарная мастерская",
-      startsAt: "2026-02-18T18:30:00+03:00",
-      city: "Москва",
-      venue: "Арт-студия Песок",
-      address: "Петровский бульвар, 9",
-      lat: 55.7686,
-      lng: 37.6147,
-      category: "event",
-      durationMin: 100,
-      price: { min: 1500, currency: "RUB" },
-      tags: ["мастер-классы", "керамика", "общение"],
-      image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=1200&q=80",
-      description: "Лепка, глазурь и приятная компания. Можно прийти одному.",
-      url: "https://t.me/okolodating_bot",
-    },
-    {
-      id: "db-evt-004",
-      title: "Лекция: искусство и наука",
-      startsAt: "2026-02-20T19:30:00+03:00",
-      city: "Москва",
-      venue: "Лекторий Сфера",
-      address: "ул. Бауманская, 7",
-      lat: 55.7707,
-      lng: 37.6794,
-      category: "event",
-      durationMin: 90,
-      price: { min: 500, currency: "RUB" },
-      tags: ["лекции", "наука", "искусство"],
-      image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=80",
-      description: "О том, как арт-практики и исследования меняют городской опыт.",
-      url: "https://t.me/okolodating_bot",
-    },
-    {
-      id: "db-evt-005",
-      title: "Вечер знакомств в баре",
-      startsAt: "2026-02-22T20:00:00+03:00",
-      city: "Москва",
-      venue: "Бар Соседи",
-      address: "ул. Покровка, 25",
-      lat: 55.7599,
-      lng: 37.6478,
-      category: "cafe",
-      durationMin: 120,
-      price: { min: 0, currency: "RUB" },
-      tags: ["бары", "знакомства", "встречи"],
-      image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=1200&q=80",
-      description: "Неформатная встреча с модератором и быстрыми ледоколами.",
-      url: "https://t.me/okolodating_bot",
-    },
-    {
-      id: "db-evt-006",
-      title: "Прогулка по Патрикам",
-      startsAt: "2026-02-24T19:00:00+03:00",
-      city: "Москва",
-      venue: "Патриаршие пруды",
-      address: "Патриаршие пруды",
-      lat: 55.7636,
-      lng: 37.5937,
+      id: "db-evt-010",
+      title: "УСАДЬБА ДУБРОВИЦЫ МУЗЕЙ, КОТОРОГО НЕТ",
+      startsAt: "2026-02-01T09:00:00+03:00",
+      city: "Подольск",
+      venue: "Маршрут по городу",
+      address: "Московская область, Подольск",
+      lat: 55.4317,
+      lng: 37.5451,
       category: "walk",
-      durationMin: 80,
+      durationMin: 480,
       price: { min: 0, currency: "RUB" },
-      tags: ["прогулка", "атмосфера", "разговоры"],
-      image: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=80",
-      description: "Вечерний маршрут, чтобы познакомиться и пройтись без спешки.",
-      url: "https://t.me/okolodating_bot",
-    },
-    {
-      id: "db-evt-007",
-      title: "Парк Горького: маршрут и кофе",
-      startsAt: "2026-02-27T13:00:00+03:00",
-      city: "Москва",
-      venue: "Парк Горького",
-      address: "Крымский Вал, 9",
-      lat: 55.7299,
-      lng: 37.6032,
-      category: "place",
-      durationMin: 110,
-      price: { min: 300, currency: "RUB" },
-      tags: ["парк", "кофе", "набережная"],
-      image: "https://images.unsplash.com/photo-1526481280695-3c687fd643ed?auto=format&fit=crop&w=1200&q=80",
-      description: "Прогулка по набережной и короткая остановка в кофейне.",
-      url: "https://t.me/okolodating_bot",
-    },
-    {
-      id: "db-evt-008",
-      title: "Jazz & Stars в планетарии",
-      startsAt: "2026-03-01T20:00:00+03:00",
-      city: "Москва",
-      venue: "Планетарий",
-      address: "Садовая-Кудринская, 5",
-      lat: 55.7612,
-      lng: 37.5817,
-      category: "event",
-      durationMin: 100,
-      price: { min: 4500, currency: "RUB" },
-      tags: ["джаз", "звезды", "концерт"],
-      image: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=1200&q=80",
-      description: "Живой квартет под сферическим куполом и проекции созвездий.",
-      url: "https://t.me/okolodating_bot",
-    },
-    {
-      id: "db-evt-009",
-      title: "Кофейный маркет выходного дня",
-      startsAt: "2026-03-03T11:00:00+03:00",
-      city: "Москва",
-      venue: "Винзавод",
-      address: "4-й Сыромятнический пер., 1/8",
-      lat: 55.7546,
-      lng: 37.6678,
-      category: "cafe",
-      durationMin: 90,
-      price: { min: 400, currency: "RUB" },
-      tags: ["маркет", "кофе", "дегустация"],
-      image: "https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1200&q=80",
-      description: "Маркет с дегустацией, обжарщиками и живой музыкой на фоне.",
-      url: "https://t.me/okolodating_bot",
+      tags: ["маршрут", "поездка", "архитектура", "история"],
+      image: "/events/podolsk/podolsk-01.jpg",
+      gallery: [
+        "/events/podolsk/podolsk-01.jpg",
+        "/events/podolsk/podolsk-02.jpg",
+        "/events/podolsk/podolsk-03.jpg",
+        "/events/podolsk/podolsk-04.jpg",
+        "/events/podolsk/podolsk-05.jpg",
+        "/events/podolsk/podolsk-06.jpg",
+        "/events/podolsk/podolsk-07.jpg",
+      ],
+      description:
+        "Подольск расположен всего в 43 км от Москвы — отличное направление для короткого путешествия на один день. Добраться можно двумя способами: на машине или общественным транспортом (метро + пригородный автобус). В дороге вы проведёте меньше двух часов.\n\nПервой точкой маршрута стоит выбрать усадьба Дубровицы — парковка на территории бесплатная. Здесь же находится знаменитая Церковь Иконы Богоматери Знамения, а после осмотра можно прогуляться по парку вдоль река Десна.\n\nЕсли останется время, загляните и в другие достопримечательности города:\n— Троицкий собор\n— усадьба Ивановское\n— музей-заповедник «Подолье»\n\nДля завтрака подойдёт кафе Здрасте. Если решите остаться в городе до вечера, отправляйтесь на обед или ужин в гастропространство Депо (на Комсомольской улице, 3) — здесь представлена кухня на любой вкус.",
+      url: "https://dubrovitsi.ru/",
     },
   ];
 }
 
 function mapRow(row: DbRow): EventRecord {
   const tags = Array.isArray(row.tags_json) ? (row.tags_json as string[]) : [];
+  const gallery = Array.isArray(row.gallery_json)
+    ? row.gallery_json.filter((item): item is string => typeof item === "string" && item.length > 0)
+    : [];
   const priceMin = row.price_min != null ? Number(row.price_min) : null;
   const priceMax = row.price_max != null ? Number(row.price_max) : null;
   const hasPrice = priceMin != null || priceMax != null;
@@ -249,6 +126,7 @@ function mapRow(row: DbRow): EventRecord {
       : undefined,
     tags,
     image: row.image ?? undefined,
+    gallery: gallery.length > 0 ? gallery : undefined,
     description: row.description ?? undefined,
     url: row.url ?? undefined,
   };
@@ -421,6 +299,9 @@ export async function getEventsPageFromDb(options: GetEventsPageOptions): Promis
   const params: Array<string | number> = [normalizedLimit + 1];
   let nextParamIndex = 2;
   const where: string[] = ["is_published = TRUE"];
+  const onlyEventIdParam = nextParamIndex++;
+  params.push(ONLY_EVENT_ID);
+  where.push(`id = $${onlyEventIdParam}`);
 
   if (cursor) {
     const startsAtParam = nextParamIndex++;
@@ -498,6 +379,7 @@ export async function getEventsPageFromDb(options: GetEventsPageOptions): Promis
         currency,
         tags_json,
         image,
+        gallery_json,
         description,
         url
       FROM public.events

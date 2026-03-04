@@ -666,7 +666,7 @@ select {
 .sheet {
   position: fixed;
   inset: 0;
-  z-index: 20;
+  z-index: 60;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -683,7 +683,7 @@ select {
   border: 1px solid var(--ma-border);
   background: rgba(255, 248, 235, 0.98);
   box-shadow: var(--ma-shadow-lg);
-  padding: 12px;
+  padding: 12px 12px calc(16px + env(safe-area-inset-bottom));
 }
 
 .sheet__grabber {

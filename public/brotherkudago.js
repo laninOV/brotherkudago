@@ -133,219 +133,31 @@
 
   const REAL_EVENTS = [
     {
-      id: "evt-201",
-      title: "Кантина Tatooine: ужин и контактный бар",
-      startsAt: "2026-02-10T19:00:00+03:00",
-      city: "Москва",
-      venue: "Кантина | Ресторан-бар Tatooine",
-      address: "ул. Петровка, 23/10с5",
-      price: { min: 1500, max: 3000, currency: "RUB" },
-      tags: ["ресторан", "бар", "этническая музыка"],
-      image:
-        "https://scontent-fra3-1.cdninstagram.com/v/t51.82787-15/628060285_17851450998654319_3642420885353076683_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=103&ig_cache_key=MzgyNDMxOTg4Nzk4OTAzMDQ4OTE3ODUxNDUwOTkyNjU0MzE5.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjc2MHgxMzUwLnNkci5DMyJ9&_nc_ohc=e4ThFcL5xNAQ7kNvwHDvoJm&_nc_oc=AdmH5eoPNahUlFVnEQpq9uz2j70QXwjupMKCtJw8qMWx0hgSm8cPl8-QbSE0GVzhrhQTD1bN95eb-L5Vl599Zqmh&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-fra3-1.cdninstagram.com&_nc_gid=wE-kxWQk8B1EFM8dSLMhYA&oh=00_AfuXs_s4Qj5zjQaOzA-8JL-beLDTbfU9USr0DwXhIDW17w&oe=698B921E",
-      description:
-        "Еда — про память, напитки — про выбор. Контактный бар, этническая музыка, формат для новых знакомств. Профиль: instagram.com/tatooine.rest. Фото: instagram.com/p/DUStq0PDD5Z/ и instagram.com/p/DUN5jpzDE2-/",
-      url: "https://www.instagram.com/tatooine.rest/",
-    },
-    {
-      id: "evt-202",
-      title: "«Билет в открытое хранение» — Гараж",
-      startsAt: "2026-02-05T11:00:00+03:00",
-      city: "Москва",
-      venue: "МСИ «Гараж»",
-      address: "ул. Крымский Вал, 9",
-      price: { min: 600, currency: "RUB" },
-      tags: ["выставка", "архив", "арт"],
-      image: "https://avatars.mds.yandex.net/get-afishanew/5098259/b6d481bb409bbe3e4973ce8bc679981e/s940x380",
-      description:
-        "Кураторы открывают архивы московского гардероба и показывают, как предметы из хранения заводят диалоги с новыми артистами.",
-      url: "https://garagemca.org",
-    },
-    {
-      id: "evt-203",
-      title: "Пистоны времени — МАММ",
-      startsAt: "2026-02-08T13:00:00+03:00",
-      city: "Москва",
-      venue: "Мультимедиа Арт Музей",
-      address: "ул. Остоженка, 16",
-      price: { min: 500, currency: "RUB" },
-      tags: ["дизайн", "кинетика", "инсталляция"],
-      image: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80",
-      description:
-        "Кинетические скульптуры и неон проговаривают о том, что означает «город будущего» здесь и сейчас.",
-      url: "https://www.mamm-mdf.ru",
-    },
-    {
-      id: "evt-204",
-      title: "Фестиваль кофе и крафта «Вкус страны»",
-      startsAt: "2026-02-15T11:00:00+03:00",
-      city: "Москва",
-      venue: "Культурный центр «Винзавод»",
-      address: "ул. Докукина, 14",
-      price: { min: 400, currency: "RUB" },
-      tags: ["кофе", "маркет", "дегустации"],
-      image: "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?auto=format&fit=crop&w=1200&q=80",
-      description:
-        "Зал Винзавода превращается в гастрономический базар: фермеры, барысты и ремесленники всю субботу варят, жарят и связывают.",
-      url: "https://winzavod.ru",
-    },
-    {
-      id: "evt-205",
-      title: "Останкинская телебашня. Панорама Москвы 360°",
-      startsAt: "2026-02-16T10:00:00+03:00",
-      city: "Москва",
-      venue: "Останкинская телебашня",
-      address: "ул. Академика Королёва, 15",
-      price: { min: 900, currency: "RUB" },
-      tags: ["экскурсия", "панорама", "высота"],
-      image: "https://avatars.mds.yandex.net/get-afishanew/5098259/70da5ba866166f38865b016d30ac2beb/1080x608",
-      description:
-        "Подъём на самую высокую точку столицы и вид на проливы рек с прозрачного пола — лучшее, что можно сделать в ясный день.",
-      url: "https://tvtower.ru",
-    },
-    {
-      id: "evt-206",
-      title: "Останкинская телебашня. Башня изнутри",
-      startsAt: "2026-02-16T18:00:00+03:00",
-      city: "Москва",
-      venue: "Останкинская телебашня",
-      address: "ул. Академика Королёва, 15",
-      price: { min: 1100, currency: "RUB" },
-      tags: ["экскурсия", "закулисье", "техника"],
-      image: "https://avatars.mds.yandex.net/get-afishanew/4395007/ed703f85e81260fc6f7f027cc67e4f44/1080x608",
-      description:
-        "Гид ведёт по техническим переходам, рассказывает про кабели, лифты и показывает скрытые балконы с видом на башню.",
-      url: "https://tvtower.ru",
-    },
-    {
-      id: "evt-207",
-      title: "День архитектуры",
-      startsAt: "2026-02-12T15:00:00+03:00",
-      city: "Москва",
-      venue: "Центр «Мосгортур»",
-      address: "ул. Сретенка, 10",
-      price: { min: 450, currency: "RUB" },
-      tags: ["архитектура", "урбанистика", "прогулка"],
-      image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80",
-      description:
-        "Публичные и закрытые дворы, витрины с авторскими проектами и кофе-брейк внутри жилого особняка — день, чтобы влюбиться в город.",
-      url: "https://mosgor.tour",
-    },
-    {
-      id: "evt-208",
-      title: "Музыка в планетарии: Jazz & Stars",
-      startsAt: "2026-02-20T19:00:00+03:00",
-      city: "Москва",
-      venue: "Планетарий",
-      address: "Просп. Мира, 118",
-      price: { min: 4500, currency: "RUB" },
-      tags: ["джаз", "звёзды", "свет"],
-      image: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=1200&q=80",
-      description:
-        "Живой квартет звучит под сферическим куполом, а световые проекции рисуют созвездия прямо над зрителем.",
-      url: "https://planetarium.ru",
-    },
-    {
-      id: "evt-209",
-      title: "Это лето фестиваль",
-      startsAt: "2026-06-06T18:00:00+03:00",
-      city: "Москва",
-      venue: "Музеон",
-      address: "Крымский Вал, 2",
-      price: { min: 4000, currency: "RUB" },
-      tags: ["фестиваль", "открытый", "арт"],
-      image: "https://images.unsplash.com/photo-1470229538611-16ba8c7ffbd7?auto=format&fit=crop&w=1200&q=80",
-      description:
-        "Поляна в Музеоне с инсталляциями, вечерними концертами и баром на свежем воздухе — летний формат с ноткой джаза.",
-      url: "https://museonpark.ru",
-    },
-    {
-      id: "evt-210",
-      title: "Катки в парке Горького",
-      startsAt: "2026-01-31T19:00:00+03:00",
-      city: "Москва",
-      venue: "Парк Горького",
-      address: "Крымский Вал, 9",
-      price: { min: 500, currency: "RUB" },
-      tags: ["спорт", "лед", "ночь"],
-      image: "https://images.unsplash.com/photo-1444492416850-3001369ed0b2?auto=format&fit=crop&w=1200&q=80",
-      description:
-        "Горит неон, звучит dj-сет и каждый вечер появляется пара шоу на льду — удобное масштабное свидание.",
-      url: "https://gorkypark.ru",
-    },
-    {
-      id: "evt-211",
-      title: "Легенды ВИА 70–80-х «Мы из СССР!»",
-      startsAt: "2026-02-04T19:00:00+03:00",
-      city: "Москва",
-      venue: "Кремлёвский дворец",
-      address: "ул. Воздвиженка, 1",
-      price: { min: 2500, currency: "RUB" },
-      tags: ["концерт", "ретро", "оригинал"],
-      image: "https://images.unsplash.com/photo-1464375117522-1311d6a5b29a?auto=format&fit=crop&w=1200&q=80",
-      description:
-        "Ансамбль-кабаре возвращает ВИА и кураж эпохи, а сценические костюмы – это короткое путешествие в СССР.",
-      url: "https://kremlinpalace.org",
-    },
-    {
-      id: "evt-212",
-      title: "Главный стендап",
-      startsAt: "2026-02-25T20:00:00+03:00",
-      city: "Москва",
-      venue: "Студия StandUp",
-      address: "ул. Васька, 14",
-      price: { min: 1190, currency: "RUB" },
-      tags: ["комедия", "новое", "онлайн"],
-      image: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=1200&q=80",
-      description:
-        "Лучшие комики пробуют свежие шутки и делятся историями про город, пока публика сидит с кокосовыми лимонадами.",
-      url: "https://standup-club.ru",
-    },
-    {
-      id: "evt-213",
-      title: "Мюзикл «Изумрудный город»",
-      startsAt: "2026-02-14T12:00:00+03:00",
-      city: "Москва",
-      venue: "Цирк",
-      address: "пр-т Мира, 40",
-      price: { min: 900, currency: "RUB" },
-      tags: ["цирк", "сказка", "акробатика"],
-      image: "https://images.unsplash.com/photo-1504805572947-34fad45aed93?auto=format&fit=crop&w=1200&q=80",
-      description:
-        "Сказка про Изумрудный город приобретает цирковую динамику с воздушными трюками и живым оркестром.",
-      url: "https://www.circus.ru",
-    },
-    {
-      id: "evt-214",
-      title: "Концерт Алексей Чумаков",
-      startsAt: "2026-03-08T20:00:00+03:00",
-      city: "Москва",
-      venue: "Концертный зал «Москва»",
-      address: "ул. Тверская, 16",
-      price: { min: 3200, currency: "RUB" },
-      tags: ["поп", "лирика", "жизнь"],
-      image: "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=1200&q=80",
-      description:
-        "Хиты, дуэты и шутливые монологи — вечер, где вокалист живо общается с публикой.",
-      url: "https://www.moscow-concert.ru",
-    },
-    {
-      id: "evt-215",
-      title: "Субботний маркет «Новые имена»",
-      startsAt: "2026-02-10T12:00:00+03:00",
-      city: "Москва",
-      venue: "Лофт «Арма»",
-      address: "ул. Лубянский пр-д, 3",
+      id: "evt-200",
+      title: "УСАДЬБА ДУБРОВИЦЫ МУЗЕЙ, КОТОРОГО НЕТ",
+      startsAt: "2026-01-30T09:00:00+03:00",
+      city: "Подольск",
+      venue: "Маршрут по городу",
+      address: "Московская область, Подольск",
       price: { min: 0, currency: "RUB" },
-      tags: ["маркет", "крафт", "сообщество"],
-      image: "https://images.unsplash.com/photo-1487202372775-1f9d79a4bd0b?auto=format&fit=crop&w=1200&q=80",
+      tags: ["маршрут", "поездка", "архитектура", "история"],
+      image: "/events/podolsk/podolsk-01.jpg",
+      gallery: [
+        "/events/podolsk/podolsk-01.jpg",
+        "/events/podolsk/podolsk-02.jpg",
+        "/events/podolsk/podolsk-03.jpg",
+        "/events/podolsk/podolsk-04.jpg",
+        "/events/podolsk/podolsk-05.jpg",
+        "/events/podolsk/podolsk-06.jpg",
+        "/events/podolsk/podolsk-07.jpg",
+      ],
       description:
-        "Авторские керамисты, графические художники и звуки винила в одном пространстве гончарной мастерской.",
-      url: "https://armalab.ru",
+        "Подольск расположен всего в 43 км от Москвы — отличное направление для короткого путешествия на один день. Добраться можно двумя способами: на машине или общественным транспортом (метро + пригородный автобус). В дороге вы проведёте меньше двух часов.\n\nПервой точкой маршрута стоит выбрать усадьба Дубровицы — парковка на территории бесплатная. Здесь же находится знаменитая Церковь Иконы Богоматери Знамения, а после осмотра можно прогуляться по парку вдоль река Десна.\n\nЕсли останется время, загляните и в другие достопримечательности города:\n— Троицкий собор\n— усадьба Ивановское\n— музей-заповедник «Подолье»\n\nДля завтрака подойдёт кафе Здрасте. Если решите остаться в городе до вечера, отправляйтесь на обед или ужин в гастропространство Депо (на Комсомольской улице, 3) — здесь представлена кухня на любой вкус.",
+      url: "https://dubrovitsi.ru/",
     },
   ];
 
-let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
+  let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
 
   const LS = {
     favs: "bk:favs",
@@ -498,22 +310,90 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
     return hash;
   }
 
+  function getEventGallery(event) {
+    const gallery = Array.isArray(event.gallery)
+      ? event.gallery.filter((item) => typeof item === "string" && item.length > 0)
+      : [];
+    if (gallery.length > 0) return gallery;
+    if (typeof event.image === "string" && event.image.length > 0) return [event.image];
+    return [FALLBACK_IMAGE];
+  }
+
+  function getEventLocationLabel(event) {
+    const city = typeof event.city === "string" ? event.city : "";
+    const venue = typeof event.venue === "string" ? event.venue : "";
+    const address = typeof event.address === "string" ? event.address : "";
+    const head = [city, venue].filter(Boolean).join(" · ");
+    if (!address) return head || "Локация уточняется";
+    return head ? `${head} — ${address}` : address;
+  }
+
+  function renderDescriptionHtml(rawDescription) {
+    const lines = String(rawDescription || "").split(/\r?\n/);
+    const blocks = [];
+    let paragraphLines = [];
+    let listItems = [];
+
+    const flushParagraph = () => {
+      if (!paragraphLines.length) return;
+      blocks.push({ type: "paragraph", text: paragraphLines.join(" ") });
+      paragraphLines = [];
+    };
+
+    const flushList = () => {
+      if (!listItems.length) return;
+      blocks.push({ type: "list", items: [...listItems] });
+      listItems = [];
+    };
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed) {
+        flushParagraph();
+        flushList();
+        continue;
+      }
+      if (trimmed.startsWith("—")) {
+        flushParagraph();
+        listItems.push(trimmed.replace(/^—\s*/, ""));
+        continue;
+      }
+      flushList();
+      paragraphLines.push(trimmed);
+    }
+
+    flushParagraph();
+    flushList();
+
+    if (!blocks.length) {
+      return `<p class="bk-modal__desc">Описание скоро появится.</p>`;
+    }
+
+    return blocks
+      .map((block) => {
+        if (block.type === "paragraph") {
+          return `<p class="bk-modal__desc">${escapeHtml(block.text)}</p>`;
+        }
+        return `<ul class="bk-modal__list">${block.items
+          .map((item) => `<li>${escapeHtml(item)}</li>`)
+          .join("")}</ul>`;
+      })
+      .join("");
+  }
+
   function eventToCardHtml(event, { isHighPriority }) {
-    const hasImage = Boolean(event.image);
-    const imageSrc = hasImage ? event.image : FALLBACK_IMAGE;
-    const previewDesc = event.description || event.venue || event.city || "";
+    const gallery = getEventGallery(event);
+    const imageSrc = gallery[0] || FALLBACK_IMAGE;
     const loading = isHighPriority ? "eager" : "lazy";
     const fetchPriority = isHighPriority ? ' fetchpriority="high"' : "";
-    const imageHtml = hasImage
-      ? `<img src="${escapeHtml(
-          imageSrc
-        )}" alt="" width="1200" height="900" loading="${loading}" decoding="async"${fetchPriority} data-fallback="${escapeHtml(
-          FALLBACK_IMAGE
-        )}">`
-      : `<div class="bk-card__placeholder" aria-hidden="true">ОКОЛО</div>`;
+    const imageHtml = `<img src="${escapeHtml(
+      imageSrc
+    )}" alt="" width="1200" height="900" loading="${loading}" decoding="async"${fetchPriority} data-fallback="${escapeHtml(
+      FALLBACK_IMAGE
+    )}">`;
 
     return `
-      <article class="bk-card ${hasImage ? "" : "bk-card--placeholder"}" data-id="${escapeHtml(event.id)}" data-action="open" role="button" tabindex="0" aria-label="${escapeHtml(
+      <article class="bk-card" data-id="${escapeHtml(event.id)}" data-action="open" role="button" tabindex="0" aria-label="${escapeHtml(
         event.title
       )}">
         <div class="bk-card__media">
@@ -521,58 +401,64 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
         </div>
         <div class="bk-card__body">
           <h3 class="bk-card__title">${escapeHtml(event.title)}</h3>
-          <p class="bk-card__desc">${escapeHtml(previewDesc)}</p>
         </div>
       </article>
     `;
   }
 
-  function eventToModalHtml(event, { isFav, canPrev, canNext }) {
-    const starts = parseDate(event.startsAt);
-    const ends = event.endsAt ? parseDate(event.endsAt) : null;
-    const when = starts
-      ? `${humanDayTitle(starts)} · ${formatTime(starts)}${
-          ends ? `–${formatTime(ends)}` : ""
-        }`
-      : "Дата не указана";
-
+  function eventToModalHtml(event, { isFav, activeImageIndex }) {
     const tags = Array.isArray(event.tags) ? event.tags : [];
-    const hasImage = Boolean(event.image);
-    const imageSrc = hasImage ? event.image : FALLBACK_IMAGE;
-    const imageHtml = hasImage
-      ? `<img src="${escapeHtml(
-          imageSrc
-        )}" alt="" width="1200" height="900" loading="lazy" decoding="async" data-fallback="${escapeHtml(
-          FALLBACK_IMAGE
-        )}">`
-      : `<div class="bk-card__placeholder" aria-hidden="true">ОКОЛО</div>`;
-
-    const address = event.address ? ` · ${escapeHtml(event.address)}` : "";
+    const gallery = getEventGallery(event);
+    const safeImageIndex = Number.isFinite(activeImageIndex)
+      ? Math.max(0, Math.min(gallery.length - 1, activeImageIndex))
+      : 0;
+    const imageSrc = gallery[safeImageIndex] || FALLBACK_IMAGE;
+    const locationLabel = getEventLocationLabel(event);
+    const descriptionHtml = renderDescriptionHtml(event.description || "");
+    const thumbsHtml =
+      gallery.length > 1
+        ? `<div class="bk-modal__thumbs" aria-label="Галерея">
+            ${gallery
+              .map(
+                (src, index) => `
+                  <button
+                    class="bk-modal__thumb ${index === safeImageIndex ? "is-active" : ""}"
+                    type="button"
+                    data-action="modal-thumb"
+                    data-index="${index}"
+                    aria-label="Фото ${index + 1}"
+                    aria-pressed="${index === safeImageIndex ? "true" : "false"}"
+                  >
+                    <img src="${escapeHtml(src)}" alt="" loading="lazy" decoding="async" data-fallback="${escapeHtml(
+                  FALLBACK_IMAGE
+                )}">
+                  </button>
+                `
+              )
+              .join("")}
+          </div>`
+        : "";
 
     return `
       <div class="bk-modal__content">
         <button class="bk-modal__close" type="submit" value="close" aria-label="Закрыть">✕</button>
-        <button class="bk-modal__nav bk-modal__nav--prev" type="button" data-action="modal-prev" aria-label="Предыдущее событие" ${
-          canPrev ? "" : "disabled"
-        }>
-          <span aria-hidden="true">←</span>
-          <span>Назад</span>
-        </button>
-        <button class="bk-modal__nav bk-modal__nav--next" type="button" data-action="modal-next" aria-label="Следующее событие" ${
-          canNext ? "" : "disabled"
-        }>
-          <span>Вперёд</span>
-          <span aria-hidden="true">→</span>
-        </button>
         <div class="bk-modal__grid">
-          <div class="bk-modal__image">${imageHtml}</div>
+          <div class="bk-modal__media">
+            <div class="bk-modal__image">
+              <img src="${escapeHtml(
+                imageSrc
+              )}" alt="" width="1200" height="900" loading="lazy" decoding="async" data-fallback="${escapeHtml(
+      FALLBACK_IMAGE
+    )}">
+            </div>
+            ${thumbsHtml}
+          </div>
           <div>
             <h2 class="bk-modal__title">${escapeHtml(event.title)}</h2>
-            <div class="bk-meta">
-              <span class="bk-meta__item">📅 ${escapeHtml(when)}</span>
-              <span class="bk-meta__item">🎟️ ${escapeHtml(formatPrice(event.price))}</span>
+            <div class="bk-meta bk-meta--modal">
+              <span class="bk-meta__item">${escapeHtml(locationLabel)}</span>
             </div>
-            <p class="bk-modal__desc">${escapeHtml(event.description || "")}</p>
+            <div class="bk-modal__text">${descriptionHtml}</div>
             <div class="bk-modal__row">
               <button class="bk-pill" type="button" data-action="fav" aria-pressed="${
                 isFav ? "true" : "false"
@@ -601,6 +487,12 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
       typeof raw?.startsAt === "string" && raw.startsAt
         ? raw.startsAt
         : new Date().toISOString();
+    const gallery = Array.isArray(raw?.gallery)
+      ? raw.gallery.filter((item) => typeof item === "string" && item.length > 0)
+      : [];
+    const image = typeof raw?.image === "string" ? raw.image : FALLBACK_IMAGE;
+    const normalizedGallery = gallery.length > 0 ? gallery : image ? [image] : [FALLBACK_IMAGE];
+
     return {
       id,
       title: typeof raw?.title === "string" ? raw.title : "Без названия",
@@ -611,7 +503,8 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
       address: typeof raw?.address === "string" ? raw.address : "",
       price: raw?.price ?? undefined,
       tags: Array.isArray(raw?.tags) ? raw.tags : [],
-      image: typeof raw?.image === "string" ? raw.image : FALLBACK_IMAGE,
+      image,
+      gallery: normalizedGallery,
       description: typeof raw?.description === "string" ? raw.description : "",
       url: typeof raw?.url === "string" ? raw.url : "https://t.me/okolodating_bot",
     };
@@ -665,6 +558,7 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
     favsOnly: readFavsOnlyFromUrl() ?? readBool(LS.favsOnly, false),
     favs: readFavs(),
     modalEventId: null,
+    modalImageIndex: 0,
     pageCache: new Map(),
     pageCursorByPage: new Map([[1, null]]),
     hasMoreByPage: new Map(),
@@ -752,6 +646,17 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
         state.pageCursorByPage.set(page + 1, payload.pageInfo.nextCursor);
       }
 
+      // If API returns an empty first page, fall back to local card set
+      // so the catalog still renders a usable default card.
+      if (page === 1 && payload.events.length === 0) {
+        state.useApi = false;
+        state.pageCache.clear();
+        state.pageCursorByPage.clear();
+        state.hasMoreByPage.clear();
+        state.pageCursorByPage.set(1, null);
+        return ensurePageLoaded(page);
+      }
+
       return payload.events.length > 0 || page === 1;
     } catch {
       // Degrade gracefully to local fallback set if API is unavailable.
@@ -824,20 +729,23 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
     updateFavsCount();
   }
 
-  function openModalFor(id) {
+  function openModalFor(id, options = {}) {
     if (!dom.modal || !dom.modalBody) return;
+    const requestedImageIndex = Number(options.imageIndex ?? 0);
     const visibleEvents = getVisibleEventsForCurrentPage();
     const list = visibleEvents.length > 0 ? visibleEvents : EVENTS;
     const event = list.find((e) => e.id === id) ?? findEventById(id);
     if (!event) return;
-    const index = list.findIndex((e) => e.id === event.id);
-    const canPrev = index > 0;
-    const canNext = index >= 0 && index < list.length - 1;
+    const gallery = getEventGallery(event);
+    const activeImageIndex = Number.isFinite(requestedImageIndex)
+      ? Math.max(0, Math.min(gallery.length - 1, requestedImageIndex))
+      : 0;
+
     state.modalEventId = id;
+    state.modalImageIndex = activeImageIndex;
     dom.modalBody.innerHTML = eventToModalHtml(event, {
       isFav: state.favs.has(id),
-      canPrev,
-      canNext,
+      activeImageIndex,
     });
     if (!dom.modal.open) {
       if (typeof dom.modal.showModal === "function") dom.modal.showModal();
@@ -848,6 +756,7 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
   function closeModal() {
     if (!dom.modal) return;
     state.modalEventId = null;
+    state.modalImageIndex = 0;
     if (typeof dom.modal.close === "function") dom.modal.close();
     else dom.modal.removeAttribute("open");
   }
@@ -879,7 +788,7 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
     if (nextIndex < 0 || nextIndex >= events.length) return;
     const target = events[nextIndex];
     if (!target) return;
-    openModalFor(target.id);
+    openModalFor(target.id, { imageIndex: 0 });
   }
 
   async function rerender({ keepScroll }) {
@@ -1026,7 +935,7 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
 
       if (action === "open") {
         e.preventDefault();
-        openModalFor(id);
+        openModalFor(id, { imageIndex: 0 });
         return;
       }
 
@@ -1044,7 +953,7 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
       e.preventDefault();
       const id = card.getAttribute("data-id");
       if (!id) return;
-      openModalFor(id);
+      openModalFor(id, { imageIndex: 0 });
     });
 
     if (dom.modal) {
@@ -1053,6 +962,7 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
       });
       dom.modal.addEventListener("close", () => {
         state.modalEventId = null;
+        state.modalImageIndex = 0;
       });
     }
 
@@ -1060,14 +970,13 @@ let EVENTS = USE_PLACEHOLDER_EVENTS ? makePlaceholderEvents(12) : REAL_EVENTS;
       dom.modalBody.addEventListener("click", (e) => {
         const target = e.target;
         if (!(target instanceof Element)) return;
-        const prevBtn = target.closest('button[data-action="modal-prev"]');
-        if (prevBtn) {
-          navigateModal(-1);
-          return;
-        }
-        const nextBtn = target.closest('button[data-action="modal-next"]');
-        if (nextBtn) {
-          navigateModal(1);
+        const thumbBtn = target.closest('button[data-action="modal-thumb"]');
+        if (thumbBtn) {
+          if (!state.modalEventId) return;
+          const thumbIndex = Number(thumbBtn.getAttribute("data-index"));
+          openModalFor(state.modalEventId, {
+            imageIndex: Number.isFinite(thumbIndex) ? thumbIndex : 0,
+          });
           return;
         }
         const btn = target.closest('button[data-action="fav"]');

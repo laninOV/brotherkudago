@@ -22,6 +22,7 @@ export type EventRecord = {
   price?: EventPrice;
   tags?: string[];
   image?: string;
+  gallery?: string[];
   description?: string;
   url?: string;
 };
