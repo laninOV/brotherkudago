@@ -284,18 +284,18 @@ section[id] {
   height: var(--bk-card-h);
   min-height: var(--bk-card-h);
   max-height: var(--bk-card-h);
-  box-shadow: 8px 8px 0 rgba(18, 18, 18, 0.2);
+  box-shadow: 5px 5px 0 #111111;
   transition: transform 180ms var(--bk-ease), box-shadow 180ms var(--bk-ease);
 }
 
 .bk-card:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 12px 12px 0 rgba(18, 18, 18, 0.26);
+  box-shadow: 8px 8px 0 #111111;
 }
 
 .bk-card:active {
   transform: translate(0, 0);
-  box-shadow: 6px 6px 0 rgba(18, 18, 18, 0.2);
+  box-shadow: 3px 3px 0 #111111;
 }
 
 .bk-card__media {
@@ -304,7 +304,7 @@ section[id] {
   height: auto;
   min-height: 0;
   border-bottom: 2px solid var(--bk-border);
-  background: linear-gradient(180deg, #f2d685 0%, #d6aa42 100%);
+  background: var(--bk-yellow);
 }
 
 .bk-card__media::after {
