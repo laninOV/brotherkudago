@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react'
-import { IconHome, IconMap, IconStar, IconUser } from './icons'
+import { IconHome, IconSliders, IconStar, IconUser } from './icons'
 
-export type TabKey = 'home' | 'map' | 'matches' | 'profile'
+export type TabKey = 'home' | 'about' | 'matches' | 'profile'
 
 export function TabBar({
   value,
@@ -11,7 +11,7 @@ export function TabBar({
   onChange: (next: TabKey) => void
 }) {
   const activeIndex =
-    value === 'home' ? 0 : value === 'map' ? 1 : value === 'matches' ? 2 : 3
+    value === 'home' ? 0 : value === 'about' ? 1 : value === 'matches' ? 2 : 3
 
   const itemWidth = 'calc((100% - 12px - 18px) / 4)'
   const activeLeft = [
@@ -43,11 +43,11 @@ export function TabBar({
         </button>
         <button
           className="tab"
-          aria-current={value === 'map' ? 'page' : undefined}
-          onClick={() => onChange('map')}
+          aria-current={value === 'about' ? 'page' : undefined}
+          onClick={() => onChange('about')}
         >
-          <IconMap />
-          <span className="tab__label">Карта</span>
+          <IconSliders />
+          <span className="tab__label">Обо мне</span>
         </button>
         <button
           className="tab"
@@ -55,7 +55,7 @@ export function TabBar({
           onClick={() => onChange('matches')}
         >
           <IconStar />
-          <span className="tab__label">Компаньон</span>
+          <span className="tab__label">Люди</span>
         </button>
         <button
           className="tab"

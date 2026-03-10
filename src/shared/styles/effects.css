@@ -24,8 +24,8 @@
 .bk-card__media:has(img[src=""]),
 .bk-card__media:has(img:not([src])) {
   background:
-    repeating-linear-gradient(45deg, rgba(14, 164, 194, 0.2) 0 12px, rgba(244, 234, 42, 0.2) 12px 24px),
-    linear-gradient(180deg, #f8f8f8, #ececec);
+    repeating-linear-gradient(45deg, rgba(165, 32, 48, 0.18) 0 12px, rgba(245, 168, 32, 0.24) 12px 24px),
+    linear-gradient(180deg, #f6edd8, #e5c078);
 }
 
 .bk-pill,

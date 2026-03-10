@@ -1,16 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import dynamic from "next/dynamic";
 import { MatchesTab } from "./tabs/MatchesTab";
 import { HomeTab } from "./tabs/HomeTab";
+import { AboutTab } from "./tabs/AboutTab";
 import { ProfileTab } from "./tabs/ProfileTab";
 import { useTelegramSetup } from "./telegram/useTelegramSetup";
 import { AppProvider } from "./state/AppState";
 import { PlacesProvider } from "./state/PlacesState";
 import { TabBar, type TabKey } from "./ui/TabBar";
-
-const MapTab = dynamic(() => import("./tabs/MapTab").then((mod) => mod.MapTab), { ssr: false });
 
 function MiniApp() {
   useTelegramSetup()
@@ -20,8 +18,8 @@ function MiniApp() {
     switch (tab) {
       case "home":
         return <HomeTab />;
-      case "map":
-        return <MapTab />;
+      case "about":
+        return <AboutTab />;
       case "matches":
         return <MatchesTab />;
       case "profile":

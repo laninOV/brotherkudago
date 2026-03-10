@@ -2,29 +2,29 @@
 :root {
   --ma-ui-font: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
-  --ma-paper: var(--retro-paper, #f6efe3);
-  --ma-paper-soft: var(--retro-paper-2, #efe5d2);
-  --ma-surface: #fff8eb;
-  --ma-ink: var(--retro-ink, #2b2a29);
-  --ma-muted: rgba(43, 42, 41, 0.68);
-  --ma-muted-2: rgba(43, 42, 41, 0.52);
+  --ma-paper: var(--retro-paper, #ece2cd);
+  --ma-paper-soft: var(--retro-paper-2, #f6edd8);
+  --ma-surface: #fff5e6;
+  --ma-ink: var(--retro-ink, #111111);
+  --ma-muted: rgba(26, 22, 16, 0.62);
+  --ma-muted-2: rgba(26, 22, 16, 0.46);
 
-  --ma-accent: var(--retro-orange, #e24b2b);
-  --ma-mustard: var(--retro-mustard, #f2c14e);
-  --ma-olive: var(--retro-olive, #7ea05a);
-  --ma-blue: var(--retro-blue, #2a82b6);
+  --ma-accent: var(--retro-coral, #c54235);
+  --ma-mustard: var(--retro-mustard, #f5a820);
+  --ma-olive: var(--retro-olive, #6a9e56);
+  --ma-blue: var(--retro-blue, #2b7a9c);
 
-  --ma-border: rgba(43, 42, 41, 0.18);
-  --ma-border-soft: rgba(43, 42, 41, 0.12);
+  --ma-border: rgba(26, 22, 16, 0.2);
+  --ma-border-soft: rgba(26, 22, 16, 0.13);
 
   --ma-radius-sm: 12px;
   --ma-radius-md: 18px;
   --ma-radius-lg: 24px;
   --ma-radius-xl: 30px;
 
-  --ma-shadow-sm: 0 6px 14px rgba(43, 42, 41, 0.12);
-  --ma-shadow-md: 0 12px 24px rgba(43, 42, 41, 0.16);
-  --ma-shadow-lg: 0 18px 34px rgba(43, 42, 41, 0.2);
+  --ma-shadow-sm: 0 6px 16px rgba(26, 22, 16, 0.14);
+  --ma-shadow-md: 0 12px 28px rgba(26, 22, 16, 0.18);
+  --ma-shadow-lg: 0 20px 40px rgba(26, 22, 16, 0.22);
 
   --ma-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --tabbar-offset: calc(88px + env(safe-area-inset-bottom));
@@ -76,9 +76,9 @@ select {
   flex-direction: column;
   padding-top: env(safe-area-inset-top);
   background:
-    linear-gradient(158deg, rgba(242, 193, 78, 0.22) 0%, rgba(126, 160, 90, 0.14) 44%, rgba(246, 239, 227, 1) 100%),
-    radial-gradient(circle at 16% 10%, rgba(226, 75, 43, 0.16), transparent 42%),
-    radial-gradient(circle at 86% 16%, rgba(42, 130, 182, 0.12), transparent 45%);
+    linear-gradient(158deg, rgba(245, 168, 32, 0.34) 0%, rgba(106, 158, 86, 0.22) 48%, var(--ma-paper, #ece2cd) 100%),
+    radial-gradient(circle at 15% 8%, rgba(197, 66, 53, 0.22), transparent 40%),
+    radial-gradient(circle at 88% 14%, rgba(43, 122, 156, 0.18), transparent 44%);
   overflow: hidden;
 }
 
@@ -130,10 +130,6 @@ select {
   padding: 0 16px calc(var(--tabbar-offset) + 16px);
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
-}
-
-.screen__body--map {
-  padding: 0 12px calc(var(--tabbar-offset) + 12px);
 }
 
 /* Controls */
@@ -198,8 +194,8 @@ select {
 .iosButton--primary,
 .actionBtn--good,
 .webBtn--primary {
-  border-color: rgba(43, 42, 41, 0.12);
-  background: linear-gradient(132deg, rgba(242, 193, 78, 0.86), rgba(126, 160, 90, 0.84));
+  border-color: rgba(26, 22, 16, 0.14);
+  background: linear-gradient(132deg, rgba(245, 168, 32, 0.94), rgba(106, 158, 86, 0.88));
   color: var(--ma-ink);
 }
 
@@ -245,8 +241,8 @@ select {
 .pill[aria-pressed="true"],
 .filter[aria-pressed="true"],
 .pill--active {
-  background: linear-gradient(132deg, rgba(242, 193, 78, 0.38), rgba(126, 160, 90, 0.34));
-  border-color: rgba(43, 42, 41, 0.24);
+  background: linear-gradient(132deg, rgba(245, 168, 32, 0.42), rgba(106, 158, 86, 0.38));
+  border-color: rgba(26, 22, 16, 0.26);
   color: var(--ma-ink);
 }
 
@@ -479,8 +475,8 @@ select {
   width: 56px;
   height: 56px;
   border-radius: 14px;
-  border: 1px solid rgba(43, 42, 41, 0.16);
-  background: linear-gradient(135deg, rgba(242, 193, 78, 0.4), rgba(126, 160, 90, 0.34));
+  border: 1px solid rgba(26, 22, 16, 0.18);
+  background: linear-gradient(135deg, rgba(245, 168, 32, 0.5), rgba(106, 158, 86, 0.42));
   flex: 0 0 auto;
 }
 
@@ -510,7 +506,7 @@ select {
 .matchScoreBar__fill {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, rgba(242, 193, 78, 0.96), rgba(126, 160, 90, 0.92));
+  background: linear-gradient(90deg, #f5a820, #6a9e56);
 }
 
 .badge {
@@ -560,9 +556,9 @@ select {
 
 .placeCard__bg--placeholder {
   background:
-    radial-gradient(circle at 18% 16%, rgba(242, 193, 78, 0.34), transparent 40%),
-    repeating-linear-gradient(45deg, rgba(126, 160, 90, 0.2) 0 16px, rgba(242, 193, 78, 0.16) 16px 32px),
-    linear-gradient(180deg, rgba(246, 239, 227, 0.95), rgba(239, 229, 210, 0.9));
+    radial-gradient(circle at 18% 16%, rgba(245, 168, 32, 0.42), transparent 40%),
+    repeating-linear-gradient(45deg, rgba(106, 158, 86, 0.24) 0 16px, rgba(245, 168, 32, 0.18) 16px 32px),
+    linear-gradient(180deg, rgba(236, 226, 205, 0.96), rgba(226, 210, 182, 0.92));
 }
 
 .placeCard__glass {
@@ -628,40 +624,6 @@ select {
   padding: 0 16px 12px;
 }
 
-/* Map */
-.mapStage {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border-radius: 22px;
-  overflow: hidden;
-  border: 1px solid var(--ma-border);
-  box-shadow: var(--ma-shadow-md);
-  background: #f7f2e7;
-}
-
-.mapStage__canvas {
-  width: 100%;
-  height: 100%;
-}
-
-.mapStage .leaflet-container {
-  width: 100%;
-  height: 100%;
-  font-family: var(--ma-ui-font);
-}
-
-.mapStage .leaflet-control-attribution {
-  font-size: 10px;
-}
-
-.mapStage__recenter {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 500;
-}
-
 /* Sheet and details */
 .sheet {
   position: fixed;
@@ -713,10 +675,10 @@ select {
 .detailsGallery__item--placeholder {
   display: grid;
   place-items: center;
-  border: 1px dashed rgba(43, 42, 41, 0.3);
+  border: 1px dashed rgba(26, 22, 16, 0.3);
   background:
-    repeating-linear-gradient(45deg, rgba(126, 160, 90, 0.18) 0 14px, rgba(242, 193, 78, 0.16) 14px 28px),
-    rgba(246, 239, 227, 0.94);
+    repeating-linear-gradient(45deg, rgba(106, 158, 86, 0.2) 0 14px, rgba(245, 168, 32, 0.18) 14px 28px),
+    rgba(236, 226, 205, 0.94);
 }
 
 .detailsGallery__item--placeholder span {
@@ -800,7 +762,7 @@ select {
   left: var(--tabbar-active-left, 6px);
   width: var(--tabbar-active-width, calc((100% - 12px - 18px) / 4));
   border-radius: 999px;
-  background: linear-gradient(130deg, rgba(242, 193, 78, 0.5), rgba(126, 160, 90, 0.44));
+  background: linear-gradient(130deg, rgba(245, 168, 32, 0.62), rgba(106, 158, 86, 0.54));
   transition:
     left 220ms var(--ma-ease),
     width 220ms var(--ma-ease);
@@ -1084,8 +1046,8 @@ select {
 }
 
 .categoryChip.is-active {
-  background: linear-gradient(130deg, rgba(242, 193, 78, 0.38), rgba(126, 160, 90, 0.34));
-  border-color: rgba(43, 42, 41, 0.22);
+  background: linear-gradient(130deg, rgba(245, 168, 32, 0.44), rgba(106, 158, 86, 0.38));
+  border-color: rgba(26, 22, 16, 0.24);
 }
 
 .historySummary {
@@ -1153,7 +1115,7 @@ select {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, rgba(242, 193, 78, 0.92), rgba(126, 160, 90, 0.92));
+  background: linear-gradient(90deg, #f5a820, #6a9e56);
 }
 
 .registerProgress__bar {
@@ -1164,7 +1126,7 @@ select {
 }
 
 .registerProgress__bar.is-active {
-  background: linear-gradient(90deg, rgba(242, 193, 78, 0.9), rgba(126, 160, 90, 0.9));
+  background: linear-gradient(90deg, #f5a820, #6a9e56);
 }
 
 .registerSummary__row {
@@ -1283,6 +1245,6 @@ select {
 .categoryChip:focus-visible,
 .detailsCloseBtn:focus-visible,
 .cardFavBtn:focus-visible {
-  outline: 2px solid rgba(42, 130, 182, 0.66);
+  outline: 2px solid rgba(43, 122, 156, 0.72);
   outline-offset: 2px;
 }

@@ -68,9 +68,15 @@
    * - image?: string (path)
    * - description?: string
    * - url?: string
-   */
+  */
 
   const FALLBACK_IMAGE = "/main-flower.png";
+  const CATEGORY_LABELS = {
+    event: "событие",
+    cafe: "кафе",
+    walk: "прогулка",
+    place: "место",
+  };
 
   // Fallback mock cards for offline/dev only.
   const USE_PLACEHOLDER_EVENTS = false;
@@ -247,6 +253,36 @@
     return "Цена не указана";
   }
 
+  function getEventCategoryLabel(event) {
+    const raw = typeof event?.category === "string" ? event.category : "event";
+    return CATEGORY_LABELS[raw] || CATEGORY_LABELS.event;
+  }
+
+  function getEventWhenLabel(event) {
+    const date = parseDate(event?.startsAt);
+    if (!date) return "дата уточняется";
+    return `${humanDayTitle(date)} · ${formatTime(date)}`;
+  }
+
+  function getEventVenueLine(event) {
+    const city = typeof event?.city === "string" ? event.city : "";
+    const venue = typeof event?.venue === "string" ? event.venue : "";
+    const line = [city, venue].filter(Boolean).join(" · ");
+    return line || "Локация уточняется";
+  }
+
+  function getEventAccentLabel(event) {
+    const priceLabel = formatPrice(event?.price);
+    if (priceLabel !== "Цена не указана") return priceLabel;
+
+    if (Array.isArray(event?.tags)) {
+      const firstTag = event.tags.find((tag) => typeof tag === "string" && tag.trim().length > 0);
+      if (firstTag) return firstTag;
+    }
+
+    return "подборка";
+  }
+
   function daysFromNow(date) {
     const now = new Date();
     const a = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -386,6 +422,10 @@
     const imageSrc = gallery[0] || FALLBACK_IMAGE;
     const loading = isHighPriority ? "eager" : "lazy";
     const fetchPriority = isHighPriority ? ' fetchpriority="high"' : "";
+    const categoryLabel = getEventCategoryLabel(event);
+    const whenLabel = getEventWhenLabel(event);
+    const venueLine = getEventVenueLine(event);
+    const accentLabel = getEventAccentLabel(event);
     const imageHtml = `<img src="${escapeHtml(
       imageSrc
     )}" alt="" width="1200" height="900" loading="${loading}" decoding="async"${fetchPriority} data-fallback="${escapeHtml(
@@ -400,7 +440,17 @@
           ${imageHtml}
         </div>
         <div class="bk-card__body">
-          <h3 class="bk-card__title">${escapeHtml(event.title)}</h3>
+          <div class="bk-card__panel">
+            <div class="bk-card__eyebrow">
+              <span class="bk-card__eyebrow-item">${escapeHtml(categoryLabel)}</span>
+              <span class="bk-card__eyebrow-item">${escapeHtml(whenLabel)}</span>
+            </div>
+            <h3 class="bk-card__title">${escapeHtml(event.title)}</h3>
+            <p class="bk-card__location">${escapeHtml(venueLine)}</p>
+            <div class="bk-card__footer">
+              <span class="bk-card__accent">${escapeHtml(accentLabel)}</span>
+            </div>
+          </div>
         </div>
       </article>
     `;
@@ -413,6 +463,9 @@
       ? Math.max(0, Math.min(gallery.length - 1, activeImageIndex))
       : 0;
     const imageSrc = gallery[safeImageIndex] || FALLBACK_IMAGE;
+    const categoryLabel = getEventCategoryLabel(event);
+    const whenLabel = getEventWhenLabel(event);
+    const accentLabel = getEventAccentLabel(event);
     const locationLabel = getEventLocationLabel(event);
     const descriptionHtml = renderDescriptionHtml(event.description || "");
     const thumbsHtml =
@@ -454,6 +507,11 @@
             ${thumbsHtml}
           </div>
           <div>
+            <div class="bk-modal__eyebrow">
+              <span class="bk-modal__eyebrow-item">${escapeHtml(categoryLabel)}</span>
+              <span class="bk-modal__eyebrow-item">${escapeHtml(whenLabel)}</span>
+              <span class="bk-modal__eyebrow-item">${escapeHtml(accentLabel)}</span>
+            </div>
             <h2 class="bk-modal__title">${escapeHtml(event.title)}</h2>
             <div class="bk-meta bk-meta--modal">
               <span class="bk-meta__item">${escapeHtml(locationLabel)}</span>

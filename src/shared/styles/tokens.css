@@ -8,28 +8,30 @@
   --retro-display-font: var(--site-display);
   --retro-title-font: var(--site-display);
 
-  --retro-paper: #ffffff;
-  --retro-paper-2: #ffffff;
-  --retro-ink: #121212;
-  --retro-ink-soft: #303030;
-  --retro-orange: #ecd06f;
-  --retro-orange-strong: #d7bd63;
-  --retro-mustard: #ecd06f;
-  --retro-olive: #84cf9a;
-  --retro-blue: #0ea4c2;
-  --retro-cream: #ffffff;
-  --retro-coral: #ef6f4b;
+  --retro-paper: #ece2cd;
+  --retro-paper-2: #f6edd8;
+  --retro-ink: #111111;
+  --retro-ink-soft: #3a3028;
+  --retro-orange: #f5a820;
+  --retro-orange-strong: #e09418;
+  --retro-mustard: #f5a820;
+  --retro-olive: #6a9e56;
+  --retro-blue: #2b7a9c;
+  --retro-cream: #f6edd8;
+  --retro-coral: #c54235;
+  --retro-red: #a52030;
+  --retro-red-dark: #781a25;
 
   --retro-radius-sm: 8px;
   --retro-radius-md: 12px;
   --retro-radius-lg: 16px;
   --retro-radius-xl: 20px;
 
-  --retro-shadow-sm: 0 8px 18px rgba(18, 18, 18, 0.1);
-  --retro-shadow-md: 0 12px 24px rgba(18, 18, 18, 0.14);
-  --retro-shadow-lg: 0 18px 28px rgba(18, 18, 18, 0.18);
-  --retro-shadow-lift: 0 8px 14px rgba(18, 18, 18, 0.14);
-  --retro-shadow-lift-lg: 0 12px 18px rgba(18, 18, 18, 0.16);
+  --retro-shadow-sm: 0 8px 20px rgba(17, 17, 17, 0.13);
+  --retro-shadow-md: 0 12px 28px rgba(17, 17, 17, 0.17);
+  --retro-shadow-lg: 0 18px 32px rgba(17, 17, 17, 0.21);
+  --retro-shadow-lift: 0 8px 16px rgba(17, 17, 17, 0.16);
+  --retro-shadow-lift-lg: 0 12px 22px rgba(17, 17, 17, 0.19);
 
   --retro-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --retro-ease-soft: cubic-bezier(0.16, 0.84, 0.44, 1);

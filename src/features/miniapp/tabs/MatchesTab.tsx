@@ -65,7 +65,7 @@ export function MatchesTab() {
     <div className="screen">
       <div className="screen__header">
         <div>
-          <div className="screen__title">Компаньон</div>
+          <div className="screen__title">Люди</div>
           <div className="screen__subtitle">
             Подбираем собеседника, который гуляет по тем же местам и любит похожую атмосферу.
           </div>
