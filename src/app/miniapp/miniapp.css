@@ -76,9 +76,9 @@ select {
   flex-direction: column;
   padding-top: env(safe-area-inset-top);
   background:
-    linear-gradient(158deg, rgba(245, 168, 32, 0.34) 0%, rgba(106, 158, 86, 0.22) 48%, var(--ma-paper, #ece2cd) 100%),
-    radial-gradient(circle at 15% 8%, rgba(197, 66, 53, 0.22), transparent 40%),
-    radial-gradient(circle at 88% 14%, rgba(43, 122, 156, 0.18), transparent 44%);
+    linear-gradient(158deg, rgba(192, 80, 48, 0.26) 0%, rgba(107, 142, 116, 0.2) 48%, var(--ma-paper, #f0e6d4) 100%),
+    radial-gradient(circle at 15% 8%, rgba(192, 80, 48, 0.2), transparent 40%),
+    radial-gradient(circle at 88% 14%, rgba(78, 114, 98, 0.18), transparent 44%);
   overflow: hidden;
 }
 
@@ -195,7 +195,7 @@ select {
 .actionBtn--good,
 .webBtn--primary {
   border-color: rgba(26, 22, 16, 0.14);
-  background: linear-gradient(132deg, rgba(245, 168, 32, 0.94), rgba(106, 158, 86, 0.88));
+  background: linear-gradient(132deg, rgba(192, 80, 48, 0.92), rgba(78, 114, 98, 0.86));
   color: var(--ma-ink);
 }
 
@@ -241,7 +241,7 @@ select {
 .pill[aria-pressed="true"],
 .filter[aria-pressed="true"],
 .pill--active {
-  background: linear-gradient(132deg, rgba(245, 168, 32, 0.42), rgba(106, 158, 86, 0.38));
+  background: linear-gradient(132deg, rgba(192, 80, 48, 0.22), rgba(107, 142, 116, 0.2));
   border-color: rgba(26, 22, 16, 0.26);
   color: var(--ma-ink);
 }
@@ -476,7 +476,7 @@ select {
   height: 56px;
   border-radius: 14px;
   border: 1px solid rgba(26, 22, 16, 0.18);
-  background: linear-gradient(135deg, rgba(245, 168, 32, 0.5), rgba(106, 158, 86, 0.42));
+  background: linear-gradient(135deg, rgba(192, 80, 48, 0.36), rgba(107, 142, 116, 0.32));
   flex: 0 0 auto;
 }
 
@@ -506,7 +506,7 @@ select {
 .matchScoreBar__fill {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #f5a820, #6a9e56);
+  background: linear-gradient(90deg, #c05030, #4e7262);
 }
 
 .badge {
@@ -556,9 +556,9 @@ select {
 
 .placeCard__bg--placeholder {
   background:
-    radial-gradient(circle at 18% 16%, rgba(245, 168, 32, 0.42), transparent 40%),
-    repeating-linear-gradient(45deg, rgba(106, 158, 86, 0.24) 0 16px, rgba(245, 168, 32, 0.18) 16px 32px),
-    linear-gradient(180deg, rgba(236, 226, 205, 0.96), rgba(226, 210, 182, 0.92));
+    radial-gradient(circle at 18% 16%, rgba(192, 80, 48, 0.3), transparent 40%),
+    repeating-linear-gradient(45deg, rgba(107, 142, 116, 0.22) 0 16px, rgba(192, 80, 48, 0.14) 16px 32px),
+    linear-gradient(180deg, rgba(240, 230, 212, 0.96), rgba(224, 208, 186, 0.92));
 }
 
 .placeCard__glass {
@@ -677,8 +677,8 @@ select {
   place-items: center;
   border: 1px dashed rgba(26, 22, 16, 0.3);
   background:
-    repeating-linear-gradient(45deg, rgba(106, 158, 86, 0.2) 0 14px, rgba(245, 168, 32, 0.18) 14px 28px),
-    rgba(236, 226, 205, 0.94);
+    repeating-linear-gradient(45deg, rgba(107, 142, 116, 0.2) 0 14px, rgba(192, 80, 48, 0.14) 14px 28px),
+    rgba(240, 230, 212, 0.94);
 }
 
 .detailsGallery__item--placeholder span {
@@ -762,7 +762,7 @@ select {
   left: var(--tabbar-active-left, 6px);
   width: var(--tabbar-active-width, calc((100% - 12px - 18px) / 4));
   border-radius: 999px;
-  background: linear-gradient(130deg, rgba(245, 168, 32, 0.62), rgba(106, 158, 86, 0.54));
+  background: linear-gradient(130deg, rgba(192, 80, 48, 0.58), rgba(107, 142, 116, 0.5));
   transition:
     left 220ms var(--ma-ease),
     width 220ms var(--ma-ease);
@@ -1046,7 +1046,7 @@ select {
 }
 
 .categoryChip.is-active {
-  background: linear-gradient(130deg, rgba(245, 168, 32, 0.44), rgba(106, 158, 86, 0.38));
+  background: linear-gradient(130deg, rgba(192, 80, 48, 0.22), rgba(107, 142, 116, 0.2));
   border-color: rgba(26, 22, 16, 0.24);
 }
 
@@ -1115,7 +1115,7 @@ select {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #f5a820, #6a9e56);
+  background: linear-gradient(90deg, #c05030, #4e7262);
 }
 
 .registerProgress__bar {
@@ -1126,7 +1126,7 @@ select {
 }
 
 .registerProgress__bar.is-active {
-  background: linear-gradient(90deg, #f5a820, #6a9e56);
+  background: linear-gradient(90deg, #c05030, #4e7262);
 }
 
 .registerSummary__row {
